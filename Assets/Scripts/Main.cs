@@ -9,11 +9,6 @@ public class Main : MonoBehaviour
     [SerializeField] private Unit _unit;
     [SerializeField] private List<Enemy> _enemys;
 
-    private void Start()
-    {
-        
-    }
-
     private void OnEnable()
     {
         _spawner.CoinSpawn += IsCoinSpawn;
