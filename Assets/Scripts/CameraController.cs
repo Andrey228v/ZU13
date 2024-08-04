@@ -8,7 +8,8 @@ public class CameraController : MonoBehaviour
     {
         float x = _unit.transform.position.x;
         float y = _unit.transform.position.y;
+        float z = -10;
 
-        transform.position = new Vector3(x, y, -10);
+        transform.position = new Vector3(x, y, z);
     }
 }

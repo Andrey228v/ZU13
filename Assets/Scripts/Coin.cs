@@ -8,7 +8,6 @@ public class Coin : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.Log($"Монета уничтожина");
         OnCoinGet(this);
     }
 
