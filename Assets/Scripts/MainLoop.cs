@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Main : MonoBehaviour
+public class MainLoop : MonoBehaviour
 {
     [SerializeField] private Spawner _spawner;
     [SerializeField] private Unit _unit;

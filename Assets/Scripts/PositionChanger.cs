@@ -4,8 +4,11 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent (typeof(CapsuleCollider2D))]
-public class MoveController : MonoBehaviour
+public class PositionChanger : MonoBehaviour
 {
+    private const string AxisHorizontal = "Horizontal";
+    private const string AnimatorParameterSpeed = "Speed";
+
     [Range(0, 10)][SerializeField] private float _speed;
     [SerializeField] private float _jumpForce;
     [SerializeField] private LayerMask _platformLayerMask;
@@ -26,8 +29,8 @@ public class MoveController : MonoBehaviour
 
     private void Update()
     {
-        _horizontalMove = Input.GetAxis("Horizontal") * _speed;
-        _animator.SetFloat("Speed", Mathf.Abs(_horizontalMove));
+        _horizontalMove = Input.GetAxis(AxisHorizontal) * _speed;
+        _animator.SetFloat(AnimatorParameterSpeed, Mathf.Abs(_horizontalMove));
 
         _renderer.flipX = (_horizontalMove < 0f) ? true : false;
 

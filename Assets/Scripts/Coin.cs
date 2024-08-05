@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
+    private const string CollisionLayerNameUnit = "Units";
+
     public event Action<Coin> OnCoinInteraction;
     public event Action<Coin> OnCoinGet;
 
@@ -15,7 +17,7 @@ public class Coin : MonoBehaviour
     {
         string layerName = LayerMask.LayerToName( collision.gameObject.layer );
 
-        if(layerName == "Units")
+        if(layerName == CollisionLayerNameUnit)
         {
             OnCoinInteraction(this);
         }

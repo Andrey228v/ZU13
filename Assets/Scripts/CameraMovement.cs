@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class CameraMovement : MonoBehaviour
 {
     [SerializeField] private Unit _unit;
     
-    void Update()
+    private void Update()
     {
         float x = _unit.transform.position.x;
         float y = _unit.transform.position.y;
