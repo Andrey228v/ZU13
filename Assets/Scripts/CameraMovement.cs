@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    [SerializeField] private Unit _unit;
+    [SerializeField] private Player _unit;
     
     private void Update()
     {

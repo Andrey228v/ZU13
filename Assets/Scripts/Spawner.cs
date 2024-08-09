@@ -11,9 +11,7 @@ public class Spawner : MonoBehaviour
 
     private bool _isSpawn = true;
 
-    public event Action<Coin> CoinSpawn;
-
-    public ObjectPool<Coin> Pool { get; private set; }
+    private ObjectPool<Coin> Pool { get; set; }
 
     private void Start()
     {
@@ -30,11 +28,13 @@ public class Spawner : MonoBehaviour
         {
             Coin spawnerObject = Pool.Get();
 
+            spawnerObject.gameObject.SetActive(true);
+
             Vector3 position = GetSpawnPosition();
 
             spawnerObject.transform.position = position;
 
-            CoinSpawn(spawnerObject);
+            spawnerObject.SetSpawner(this);
 
             yield return wait;
         }
@@ -56,5 +56,10 @@ public class Spawner : MonoBehaviour
     private Coin CreateObject()
     {
         return Instantiate(_objectPrefab);
+    }
+
+    public void ReturnToPool(Coin coin)
+    {
+        Pool.Release(coin);
     }
 }

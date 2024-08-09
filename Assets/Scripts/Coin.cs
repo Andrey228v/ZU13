@@ -3,23 +3,18 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    private const string CollisionLayerNameUnit = "Units";
-
-    public event Action<Coin> OnCoinInteraction;
     public event Action<Coin> OnCoinGet;
 
-    private void OnDestroy()
+    private Spawner _spawner;
+
+    public void Get()
     {
-        OnCoinGet(this);
+        gameObject.SetActive(false);
+        _spawner.ReturnToPool(this);
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    public void SetSpawner(Spawner spawner)
     {
-        string layerName = LayerMask.LayerToName( collision.gameObject.layer );
-
-        if(layerName == CollisionLayerNameUnit)
-        {
-            OnCoinInteraction(this);
-        }
+        _spawner = spawner;
     }
 }

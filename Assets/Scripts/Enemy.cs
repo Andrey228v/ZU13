@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -6,17 +5,17 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform _patrolRoute;
     [SerializeField] private float _speed;
 
-    private List<Transform> _places;
+    private Transform[] _places;
     private int _placePointIndex = 0;
     private Transform _nextPlace;
 
     private void Start()
     {
-        _places = new List<Transform>();
+        _places = new Transform[_patrolRoute.childCount];
 
         for (int i = 0; i < _patrolRoute.childCount; i++)
         {
-            _places.Add(_patrolRoute.GetChild(i).GetComponent<Transform>());
+            _places[i] = _patrolRoute.GetChild(i);
         }
 
         _nextPlace = _places[_placePointIndex];
@@ -32,7 +31,7 @@ public class Enemy : MonoBehaviour
 
     private void NextPoint()
     {
-        _placePointIndex = ++_placePointIndex % _places.Count;
+        _placePointIndex = ++_placePointIndex % _places.Length;
         _nextPlace = _places[_placePointIndex];
     }
 }

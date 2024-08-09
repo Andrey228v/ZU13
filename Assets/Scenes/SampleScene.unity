@@ -223,9 +223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95a07e51f5db1354bbf8d2d4c10f21a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawner: {fileID: 730743230}
-  _unit: {fileID: 817464392}
-  _enemys: []
 --- !u!1 &319217637
 GameObject:
   m_ObjectHideFlags: 0
@@ -9223,6 +9220,7 @@ GameObject:
   - component: {fileID: 817464387}
   - component: {fileID: 817464389}
   - component: {fileID: 817464390}
+  - component: {fileID: 817464393}
   - component: {fileID: 817464391}
   - component: {fileID: 817464392}
   m_Layer: 7
@@ -9360,10 +9358,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 4
-  _jumpForce: 125
-  _platformLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!70 &817464391
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -9411,6 +9405,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf5a7db35ea7df54c87430e560c9f106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &817464393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817464384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6bba8ff862d9a64ea357cbd3d626179, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _jumpForce: 125
+  _platformLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &818668196
 GameObject:
   m_ObjectHideFlags: 0
