@@ -3,18 +3,11 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    public event Action<Coin> OnCoinGet;
-
-    private Spawner _spawner;
+    public event Action<Coin> CoinGeting;
 
     public void Get()
     {
         gameObject.SetActive(false);
-        _spawner.ReturnToPool(this);
-    }
-
-    public void SetSpawner(Spawner spawner)
-    {
-        _spawner = spawner;
+        CoinGeting?.Invoke(this);
     }
 }

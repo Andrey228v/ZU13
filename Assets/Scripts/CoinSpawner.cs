@@ -1,21 +1,19 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public class Spawner : MonoBehaviour
+public class CoinSpawner : MonoBehaviour
 {
     [Min(0.1f)][SerializeField] private float _timeSpawn;
     [SerializeField] private Coin _objectPrefab;
 
     private bool _isSpawn = true;
-
-    private ObjectPool<Coin> Pool { get; set; }
+    private ObjectPool<Coin> _pool;
 
     private void Start()
     {
-        Pool = new ObjectPool<Coin>(CreateObject);
+        _pool = new ObjectPool<Coin>(CreateObject);
 
         StartCoroutine(Spawn());
     }
@@ -26,15 +24,14 @@ public class Spawner : MonoBehaviour
 
         while (_isSpawn)
         {
-            Coin spawnerObject = Pool.Get();
+            Coin spawnerObject = _pool.Get();
 
-            spawnerObject.gameObject.SetActive(true);
+            spawnerObject.CoinGeting += ReturnToPool;
 
             Vector3 position = GetSpawnPosition();
 
             spawnerObject.transform.position = position;
-
-            spawnerObject.SetSpawner(this);
+            spawnerObject.gameObject.SetActive(true);
 
             yield return wait;
         }
@@ -48,9 +45,7 @@ public class Spawner : MonoBehaviour
         float y = transform.position.y;
         float z = 0;
 
-        Vector3 position = new Vector3(x, y, z);
-
-        return position;
+        return new Vector3(x, y, z);
     }
 
     private Coin CreateObject()
@@ -58,8 +53,9 @@ public class Spawner : MonoBehaviour
         return Instantiate(_objectPrefab);
     }
 
-    public void ReturnToPool(Coin coin)
+    private void ReturnToPool(Coin coin)
     {
-        Pool.Release(coin);
+        coin.CoinGeting -= ReturnToPool;
+        _pool.Release(coin);
     }
 }
