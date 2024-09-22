@@ -8,14 +8,16 @@ public class PatrollingState : State
     public Transform NextPlace { get; private set; }
 
     private float _distanceError = 0.1f;
+    private float _distanceDeviationFromZone = -1;
 
-    public PatrollingState(EnemyBody enemy) : base(enemy){}
+    public PatrollingState(EnemyBody enemy, float radiusFOV) : base(enemy, radiusFOV) 
+    {
+        _radiusFOV = radiusFOV;
+    }
 
     public override void Enter()
     {
         base.Enter();
-
-        _radiusFOV = 5;
 
         _places = new Transform[_enemy.PatrolRoute.childCount];
 
@@ -26,10 +28,8 @@ public class PatrollingState : State
 
         _enemy.transform.position = _places[0].position;
         _lastPosition = _enemy.transform.position;
-
         NextPlace = _places[_placePointIndex];
     }
-
 
     public override void Exit()
     {
@@ -48,6 +48,11 @@ public class PatrollingState : State
         else
         {
             NextPoint();
+        }
+
+        if(_enemy.transform.position.y - _places[0].position.y < _distanceDeviationFromZone)
+        {
+            _enemy.transform.position = _places[0].position;
         }
     }
 

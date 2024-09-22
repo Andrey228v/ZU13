@@ -4,13 +4,15 @@ public class AttackState : State
 {
     private const string AnimatorParameterAttack = "Attack";
 
-    public AttackState(EnemyBody enemy) : base(enemy){}
+    public AttackState(EnemyBody enemy, float radiusFOV) : base(enemy, radiusFOV) 
+    {
+        _radiusFOV = radiusFOV;
+    }
 
     public override void Enter()
     {
         base.Enter();
 
-        _radiusFOV = 3;
         _enemy.Animator.SetBool(AnimatorParameterAttack, true);
     }
 

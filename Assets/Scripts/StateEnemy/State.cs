@@ -4,7 +4,7 @@ public abstract class State
 {
     protected EnemyBody _enemy;
     protected RaycastHit2D _hit;
-    protected float _radiusFOV = 10;
+    protected float _radiusFOV;
     protected Vector2 _rightMoveDirection = new Vector2(-1, 0);
     protected Vector2 _leftMoveDirection = new Vector2(1, 0);
     protected bool _isHited = false;
@@ -16,9 +16,10 @@ public abstract class State
     private Color _inHitColor = Color.yellow;
     private Color _outHitColor = Color.red;
 
-    public State(EnemyBody enemy)
+    public State(EnemyBody enemy, float radiusFOV)
     {
         _enemy = enemy;
+        _radiusFOV = radiusFOV;
         _enemy.SetMoveDirection(_enemy.Renderer.flipX ? _rightMoveDirection : _leftMoveDirection);
     }
 
@@ -37,15 +38,13 @@ public abstract class State
         {
             _enemy.Renderer.flipX = true;
             _enemy.SetMoveDirection(_rightMoveDirection);
-
-            _enemy.AttackAria.transform.localPosition = new Vector2(_enemy.AttackAria.transform.localPosition.x * -1, _enemy.AttackAria.transform.localPosition.y);
+            _enemy.AttackAria.offset = new Vector2(_enemy.AttackAria.offset.x *-1, _enemy.AttackAria.offset.y);
         }
         else if (_enemy.transform.localPosition.x > _lastPosition.x && _enemy.MoveDirectoin == _rightMoveDirection)
         {
             _enemy.Renderer.flipX = false;
             _enemy.SetMoveDirection(_leftMoveDirection);
-
-            _enemy.AttackAria.transform.localPosition = new Vector2(_enemy.AttackAria.transform.localPosition.x * -1, _enemy.AttackAria.transform.localPosition.y);
+            _enemy.AttackAria.offset = new Vector2(_enemy.AttackAria.offset.x * -1, _enemy.AttackAria.offset.y);
         }
 
         _lastPosition = _enemy.transform.localPosition;

@@ -4,13 +4,14 @@ public class PersecutionState : State
 {
     private const string AnimatorParameterPersecution = "Persecution";
 
-    public PersecutionState(EnemyBody enemy) : base(enemy){}
+    public PersecutionState(EnemyBody enemy, float radiusFOV) : base(enemy, radiusFOV) 
+    {
+        _radiusFOV = radiusFOV;
+    }
 
     public override void Enter()
     {
         base.Enter();
-
-        _radiusFOV = 10;
 
         _enemy.Animator.SetBool(AnimatorParameterPersecution, true);
     }
