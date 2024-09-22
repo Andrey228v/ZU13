@@ -15,6 +15,8 @@ public class PatrollingState : State
     {
         base.Enter();
 
+        _radiusFOV = 5;
+
         _places = new Transform[_enemy.PatrolRoute.childCount];
 
         for (int i = 0; i < _enemy.PatrolRoute.childCount; i++)
@@ -23,7 +25,7 @@ public class PatrollingState : State
         }
 
         _enemy.transform.position = _places[0].position;
-        LastPosition = _enemy.transform.position;
+        _lastPosition = _enemy.transform.position;
 
         NextPlace = _places[_placePointIndex];
     }
@@ -32,7 +34,7 @@ public class PatrollingState : State
     public override void Exit()
     {
         base.Exit();
-        LastPosition = _places[0].position;
+        _lastPosition = _places[0].position;
     }
 
     public override void Update()
@@ -45,7 +47,6 @@ public class PatrollingState : State
         }
         else
         {
-            Debug.Log("SMENA");
             NextPoint();
         }
     }
@@ -60,29 +61,24 @@ public class PatrollingState : State
     {
         base.DrawRaycst();
 
-        Collider2D collider = Physics2D.OverlapCircle(_enemy.transform.position, _radiusFOV, _enemy.TargetLayer);
-
-        if (collider != null)
+        if (_isHited)
         {
-            _hit = Physics2D.Raycast(_enemy.EyePosition.position, collider.gameObject.transform.position - _enemy.EyePosition.position, Vector3.Distance(_enemy.EyePosition.position, collider.gameObject.transform.position));
-
-            Debug.DrawRay(_enemy.EyePosition.position, collider.gameObject.transform.position - _enemy.EyePosition.position, Color.red);
-
-            Debug.Log(_hit.collider);
-
             if (_hit.collider != null && _enemy.IsTargetInFOV == false)
             {
-                bool isPlayerFound = _hit.collider.TryGetComponent(out Player player);
-
                 if (isPlayerFound)
                 {
-                    player.DetectedByEnemy();
+                    _player.DetectedByEnemy();
                     _enemy.SetTargetInFOV(true);
-                    _enemy.SetTargetPlayer(player);
+                    _enemy.SetTargetPlayer(_player);
 
                     _enemy.ChangeState(EnemyStateType.Persecution);
                 }
             }
+        }
+        else if (_enemy.IsTargetInFOV == true)
+        {
+            _enemy.Target.UndetectedByEnemy();
+            _enemy.SetTargetInFOV(false);
         }
     }
 

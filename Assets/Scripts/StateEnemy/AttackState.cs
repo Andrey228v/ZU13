@@ -4,14 +4,13 @@ public class AttackState : State
 {
     private const string AnimatorParameterAttack = "Attack";
 
-    public AttackState(EnemyBody enemy) : base(enemy)
-    {
-        _radiusFOV = _enemy.AttackDistance;
-    }
+    public AttackState(EnemyBody enemy) : base(enemy){}
 
     public override void Enter()
     {
         base.Enter();
+
+        _radiusFOV = 3;
         _enemy.Animator.SetBool(AnimatorParameterAttack, true);
     }
 
@@ -32,16 +31,8 @@ public class AttackState : State
     {
         base.DrawRaycst();
 
-        Collider2D collider = Physics2D.OverlapCircle(_enemy.transform.position, _radiusFOV, _enemy.TargetLayer);
-
-        if (collider != null)
+        if (_isHited)
         {
-            _hit = Physics2D.Raycast(_enemy.EyePosition.position, collider.gameObject.transform.position - _enemy.EyePosition.position, Vector3.Distance(_enemy.EyePosition.position, collider.gameObject.transform.position));
-
-            Debug.DrawRay(_enemy.EyePosition.position, collider.gameObject.transform.position - _enemy.EyePosition.position, Color.yellow);
-
-            bool isPlayerFound = _hit.collider.TryGetComponent(out Player player);
-
             if (_hit.collider != null && isPlayerFound == true && _hit.distance > _enemy.AttackDistance)
             {
                 _enemy.ChangeState(EnemyStateType.Persecution);
@@ -50,7 +41,6 @@ public class AttackState : State
             {
                 _enemy.ChangeState(EnemyStateType.Patrolling);
             }
-
         }
         else if (_enemy.IsTargetInFOV == true)
         {

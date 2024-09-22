@@ -52,10 +52,7 @@ public class EnemyBody : MonoBehaviour
     private void Update()
     {
         Speed = _speed;
-
         CurrentStateText = StateMachine.CurrentState.ToString();
-
-        StateMachine.CurrentState.DrawRaycst();
         StateMachine.CurrentState.Update();
     }
 

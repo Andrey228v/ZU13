@@ -4,14 +4,14 @@ public class PersecutionState : State
 {
     private const string AnimatorParameterPersecution = "Persecution";
 
-    public PersecutionState(EnemyBody enemy) : base(enemy)
-    {
-        _radiusFOV = 10f;
-    }
+    public PersecutionState(EnemyBody enemy) : base(enemy){}
 
     public override void Enter()
     {
         base.Enter();
+
+        _radiusFOV = 10;
+
         _enemy.Animator.SetBool(AnimatorParameterPersecution, true);
     }
 
@@ -32,19 +32,11 @@ public class PersecutionState : State
     {
         base.DrawRaycst();
 
-        Collider2D collider = Physics2D.OverlapCircle(_enemy.transform.position, _radiusFOV, _enemy.TargetLayer);
-
-        if (collider != null)
+        if (_isHited) 
         {
-            _hit = Physics2D.Raycast(_enemy.EyePosition.position, collider.gameObject.transform.position - _enemy.EyePosition.position, Vector3.Distance(_enemy.EyePosition.position, collider.gameObject.transform.position));
-
-            Debug.DrawRay(_enemy.EyePosition.position, collider.gameObject.transform.position - _enemy.EyePosition.position, Color.yellow);
-
             if (_hit.collider != null && _enemy.IsTargetInFOV == true)
             {
-                bool isPlayerFoundVision = _hit.collider.TryGetComponent(out Player player);
-
-                if (isPlayerFoundVision == false)
+                if (isPlayerFound == false)
                 {
                     _enemy.Target.UndetectedByEnemy();
                     _enemy.SetTargetInFOV(false);
@@ -55,6 +47,7 @@ public class PersecutionState : State
                     _enemy.ChangeState(EnemyStateType.Attack);
                 }
             }
+
             else if (_hit.collider != null && _enemy.IsTargetInFOV == false)
             {
                 _enemy.Target.UndetectedByEnemy();

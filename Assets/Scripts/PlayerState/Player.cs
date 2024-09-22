@@ -1,5 +1,4 @@
 using Assets.Scripts.PlayerState;
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(TakeDamage), typeof(Animator), typeof(Rigidbody2D))]
@@ -81,7 +80,6 @@ public class Player : MonoBehaviour
         }
     }
     
-
     private void OnTriggerStay2D(Collider2D collision)
     {
         StateMachinePlayer.CurrentState.TriggerEnter(collision);
@@ -120,7 +118,7 @@ public class Player : MonoBehaviour
                 break;
 
             default:
-                Console.WriteLine("Такого состояния нет");
+                Debug.Log("Такого состояния нет");
                 break;
         }
     }
