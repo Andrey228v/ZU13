@@ -360,6 +360,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14ce585c5382a4c4590a2ecb8b2fb594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _health: 50
+  _maxHealth: 50
+  _damage: 5
   _patrolRoute: {fileID: 3450529564024896681}
   _eyePosition: {fileID: 387950591368739060}
   _speed: 2

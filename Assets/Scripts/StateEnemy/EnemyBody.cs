@@ -1,10 +1,14 @@
 using System;
+using Assets.Scripts.Service;
 using Assets.Scripts.StateEnemy;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator), typeof(SpriteRenderer), typeof(Rigidbody2D))]
-public class EnemyBody : MonoBehaviour
+public class EnemyBody : MonoBehaviour, IDamageDealer, IDamageTaker, IMoveUnit
 {
+    [SerializeField] private int _health;
+    [SerializeField] private int _maxHealth;
+    [SerializeField] private int _damage;
     [SerializeField] private Transform _patrolRoute;
     [SerializeField] private Transform _eyePosition;
     [SerializeField] private float _speed;
@@ -29,17 +33,25 @@ public class EnemyBody : MonoBehaviour
     public float AttackDistance {  get; private set; }
     public LayerMask TargetLayer { get; private set; }
     public bool IsTargetInFOV { get; private set; }
-    public Player Target { get; private set; }
+    public ITarget Target { get; private set; }
     public BoxCollider2D AttackAria { get; private set; }
     public Vector2 MoveDirectoin { get; private set; }
     public Rigidbody2D Rigidbody {get; private set;}
+    public int Damage { get; private set; }
+    public float AttackSpeed { get; private set; }
+    public Vector2 DamageDirection { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         Renderer = GetComponent<SpriteRenderer>();
         Animator = GetComponent<Animator>();
         Rigidbody = GetComponent<Rigidbody2D>();
 
+        Damage = _damage;
+    }
+
+    private void Start()
+    {
         PatrolRoute = _patrolRoute;
         EyePosition = _eyePosition;
         AttackDistance = 2;
@@ -78,6 +90,12 @@ public class EnemyBody : MonoBehaviour
         StateMachine.CurrentState.TriggerEnter(collision);
     }
 
+    private void OnDestroy()
+    {
+        IsTargetInFOV = false;
+        Target.UndetectedByEnemy();
+    }
+
     public void ChangeState(EnemyStateType stateType)
     {
         switch (stateType)
@@ -104,13 +122,44 @@ public class EnemyBody : MonoBehaviour
         IsTargetInFOV = found;
     }
 
-    public void SetTargetPlayer(Player player)
+    public void SetTargetPlayer(ITarget target)
     {
-        Target = player;
+        Target = target;
     }
 
     public void SetMoveDirection(Vector2 moveDirectoin)
     {
         MoveDirectoin = moveDirectoin;
     }
+   
+    public void SetDamage(int damage)
+    {
+        Damage = damage;
+    }
+    
+    public void SetDamageDirection(Vector2 damageDirection)
+    {
+        DamageDirection = damageDirection;
+    }
+
+    public void SetAttackDistance(float attackDistance) { AttackDistance = attackDistance; }
+
+    public void SetAttackSpeed(float attackSpeed) { AttackSpeed = attackSpeed; }
+
+    public void GetDamage(int damage) 
+    {
+        _health -= damage;
+
+        if (_health < 0)
+        {
+            _health = 0;
+        }
+
+        if (_health == 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void SetSpeed(float speed) { Speed = speed; }
 }

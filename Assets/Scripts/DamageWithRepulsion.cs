@@ -1,16 +1,16 @@
+using Assets.Scripts.Service;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class TakeDamage : MonoBehaviour
+public class DamageWithRepulsion : MonoBehaviour, ITypeDamage
 {
-    [SerializeField] Vector2 _repulsionForce;
+    [SerializeField] private Vector2 _repulsionForce;
 
     private bool _isDamage = false;
     private Vector2 _damageDirection;
-
     private Rigidbody2D _rigidbody;
 
-    private void Start()
+    private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
@@ -24,9 +24,9 @@ public class TakeDamage : MonoBehaviour
         }
     }
 
-    public void GetDamage(Vector2 damageDirection)
+    public void AttackDealer(IDamageDealer damageDealer)
     {
         _isDamage = true;
-        _damageDirection = damageDirection.normalized;
+        _damageDirection = damageDealer.DamageDirection.normalized;
     }
 }

@@ -26,7 +26,7 @@ public class PersecutionState : State
     {
         base.Update();
 
-        _enemy.transform.position = Vector3.MoveTowards(_enemy.transform.position, _enemy.Target.transform.position, _enemy.Speed * Time.deltaTime);
+        _enemy.transform.position = Vector3.MoveTowards(_enemy.transform.position, _enemy.Target.GetPosition(), _enemy.Speed * Time.deltaTime);
     }
 
     public override void DrawRaycst()

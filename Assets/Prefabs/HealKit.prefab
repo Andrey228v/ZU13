@@ -106,10 +106,10 @@ BoxCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 639
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 639
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -171,3 +171,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 249e61406dad9c84a8d6e1800b0144b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _healthPoints: 20

@@ -10,6 +10,12 @@ public class CoinSpawner : MonoBehaviour
 
     private bool _isSpawn = true;
     private ObjectPool<Coin> _pool;
+    private BoxCollider2D _collider;
+
+    private void Awake()
+    {
+        _collider = GetComponent<BoxCollider2D>();
+    }
 
     private void Start()
     {
@@ -26,7 +32,7 @@ public class CoinSpawner : MonoBehaviour
         {
             Coin spawnerObject = _pool.Get();
 
-            spawnerObject.CoinGeting += ReturnToPool;
+            spawnerObject.Collected += ReturnToPool;
 
             Vector3 position = GetSpawnPosition();
 
@@ -39,7 +45,7 @@ public class CoinSpawner : MonoBehaviour
 
     private Vector3 GetSpawnPosition()
     {
-        Vector3 bounds = GetComponent<BoxCollider2D>().bounds.extents;
+        Vector3 bounds = _collider.bounds.extents;
 
         float x = UnityEngine.Random.Range(-bounds.x, bounds.x);
         float y = transform.position.y;
@@ -55,7 +61,7 @@ public class CoinSpawner : MonoBehaviour
 
     private void ReturnToPool(Coin coin)
     {
-        coin.CoinGeting -= ReturnToPool;
+        coin.Collected -= ReturnToPool;
         _pool.Release(coin);
     }
 }

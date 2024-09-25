@@ -1,3 +1,4 @@
+using Assets.Scripts.Service;
 using UnityEngine;
 
 public class AttackState : State
@@ -26,7 +27,7 @@ public class AttackState : State
     {
         base.Update();
 
-        _enemy.transform.position = Vector3.MoveTowards(_enemy.transform.position, _enemy.Target.transform.position, _enemy.Speed * Time.deltaTime);
+        _enemy.transform.position = Vector3.MoveTowards(_enemy.transform.position, _enemy.Target.GetPosition(), _enemy.Speed * Time.deltaTime);
     }
 
     public override void DrawRaycst()
@@ -58,9 +59,19 @@ public class AttackState : State
     {
         base.TriggerEnter(collider);
 
-        if (collider.TryGetComponent(out Player player))
+        if (collider.TryGetComponent(out IMoveUnit body))
         {
-            _enemy.Target.TakeDamage.GetDamage(_enemy.MoveDirectoin);
+            _enemy.SetDamageDirection(-body.MoveDirectoin);
+
+            if (collider.TryGetComponent(out IDamageTaker target))
+            {
+                target.GetDamage(_enemy.Damage);
+
+                if (collider.TryGetComponent(out ITypeDamage typeDamage))
+                {
+                    typeDamage.AttackDealer(_enemy);
+                }
+            }
         }
     }
     

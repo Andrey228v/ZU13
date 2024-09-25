@@ -1,13 +1,14 @@
+using Assets.Scripts.Service;
 using System;
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Coin : MonoBehaviour, ITakerObject
 {
-    public event Action<Coin> CoinGeting;
+    public event Action<Coin> Collected;
 
-    public void Get()
+    public void Get(GameObject taker)
     {
         gameObject.SetActive(false);
-        CoinGeting?.Invoke(this);
+        Collected?.Invoke(this);
     }
 }

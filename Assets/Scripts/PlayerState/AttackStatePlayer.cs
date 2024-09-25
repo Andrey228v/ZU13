@@ -1,36 +1,24 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Service;
+using UnityEngine;
 
 namespace Assets.Scripts.PlayerState
 {
     public class AttackStatePlayer : StatePlayer
     {
-        private const string AnimatorParameterAttack = "IsAttack";
-        private const string AnimationNameStay = "AttackStay";
-        private const string AnimationNameRun = "AttackRun";
-
         public AttackStatePlayer(Player player) : base(player){}
 
         public override void Enter()
         {
             base.Enter();
 
-            _player.Animator.SetBool(AnimatorParameterAttack, true);
+            _player.Animator.SetBool(PlayerAnimations.AnimatorParameterAttack, true);
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            _player.Animator.SetBool(AnimatorParameterAttack, false);
-        }
-
-        public override void FixedUpdate()
-        {
-            base.FixedUpdate();
-
-            _player.Animator.SetFloat(AnimatorParameterSpeed, Mathf.Abs(_horizontalMove));
-            Vector2 targetForce = new Vector2(_horizontalMove * _player.MaxSpeed, _player.Rigidbody.velocity.y);
-            _player.Rigidbody.AddForce(targetForce, ForceMode2D.Impulse); 
+            _player.Animator.SetBool(PlayerAnimations.AnimatorParameterAttack, false);
         }
 
         public override void Update() 
@@ -47,11 +35,18 @@ namespace Assets.Scripts.PlayerState
         {
             base.TriggerEnter(collider);
 
-            if (collider.TryGetComponent(out TakeDamage target))
+            if (collider.TryGetComponent(out IMoveUnit body)) 
             {
-                if (collider.TryGetComponent(out EnemyBody body))
+                _player.SetDamageDirection(-body.MoveDirectoin);
+
+                if(collider.TryGetComponent(out IDamageTaker target))
                 {
-                    target.GetDamage(-body.MoveDirectoin);
+                    target.GetDamage(_player.Damage);
+
+                    if (collider.TryGetComponent(out ITypeDamage typeDamage))
+                    {
+                        typeDamage.AttackDealer(_player);
+                    }
                 }
             }
         }
@@ -60,7 +55,7 @@ namespace Assets.Scripts.PlayerState
         {
             AnimatorStateInfo animationStateInfo = _player.Animator.GetCurrentAnimatorStateInfo(0);
 
-            return animationStateInfo.IsName("Attack") && animationStateInfo.normalizedTime < 1.0f;
+            return animationStateInfo.IsName(PlayerAnimations.AnimationNameAttack) && animationStateInfo.normalizedTime < 1.0f;
         }
     }
 }

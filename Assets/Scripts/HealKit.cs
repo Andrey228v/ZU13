@@ -1,14 +1,22 @@
-using System;
+using Assets.Scripts.Service;
 using UnityEngine;
 
-public class HealKit : MonoBehaviour
+public class HealKit : MonoBehaviour, ITakerObject
 {
-    public event Action<HealKit> HealGeting;
+    [SerializeField] private int _healthPoints;
 
-    public void Get()
+    public int HealthPoints { get; private set; }
+
+    private void Awake()
     {
-        Debug.Log("GET HK");
-        Destroy(gameObject);
-        HealGeting?.Invoke(this);
+        HealthPoints = _healthPoints;
+    }
+
+    public void Get(GameObject taker)
+    {
+        if (taker.TryGetComponent(out IHealthTaker healthTaker))
+        {
+            healthTaker.TakeHealth(this);
+        }
     }
 }
