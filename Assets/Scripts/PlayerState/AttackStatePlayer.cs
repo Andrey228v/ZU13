@@ -5,6 +5,8 @@ namespace Assets.Scripts.PlayerState
 {
     public class AttackStatePlayer : StatePlayer
     {
+        private bool _isAttack = false;
+
         public AttackStatePlayer(Player player) : base(player){}
 
         public override void Enter()
@@ -12,6 +14,7 @@ namespace Assets.Scripts.PlayerState
             base.Enter();
 
             _player.Animator.SetBool(PlayerAnimations.AnimatorParameterAttack, true);
+            _isAttack = false;
         }
 
         public override void Exit()
@@ -33,19 +36,19 @@ namespace Assets.Scripts.PlayerState
 
         public override void TriggerEnter(Collider2D collider)
         {
-            base.TriggerEnter(collider);
-
-            if (collider.TryGetComponent(out IMoveUnit body)) 
+            if (_isAttack == false)
             {
-                _player.SetDamageDirection(-body.MoveDirectoin);
+                base.TriggerEnter(collider);
 
-                if(collider.TryGetComponent(out IDamageTaker target))
+                if (collider.TryGetComponent(out IMoveUnit body))
                 {
-                    target.GetDamage(_player.Damage);
+                    _player.SetDamageDirection(-body.MoveDirectoin);
 
-                    if (collider.TryGetComponent(out ITypeDamage typeDamage))
+                    if (collider.TryGetComponent(out IDamageTaker target))
                     {
-                        typeDamage.AttackDealer(_player);
+                        _player.Attack(target);
+                        target.GetDamage(_player);
+                        _isAttack = true;
                     }
                 }
             }

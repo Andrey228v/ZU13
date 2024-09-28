@@ -1,6 +1,4 @@
 using Assets.Scripts.PlayerState;
-using Assets.Scripts.Service;
-using UnityEngine;
 
 public class MovementState : StatePlayer
 {
@@ -12,7 +10,7 @@ public class MovementState : StatePlayer
  
         if (_player.UserInput.Attack) 
         {
-            _player.ChangeState(PlayerStateType.Attack);
+            _player.StateMachinePlayer.SelectState(PlayerStateType.Attack);
         }
     }
 }

@@ -6,8 +6,7 @@ public abstract class State
     protected EnemyBody _enemy;
     protected RaycastHit2D _hit;
     protected float _radiusFOV;
-    protected Vector2 _rightMoveDirection = new Vector2(-1, 0);
-    protected Vector2 _leftMoveDirection = new Vector2(1, 0);
+    
     protected bool _isHited = false;
     protected bool isPlayerFound = false;
     protected ITarget _player;
@@ -22,37 +21,37 @@ public abstract class State
     {
         _enemy = enemy;
         _radiusFOV = radiusFOV;
-        _enemy.SetMoveDirection(_enemy.Renderer.flipX ? _rightMoveDirection : _leftMoveDirection);
+        _enemy.SetMoveDirection(_enemy.Renderer.flipX ? Constants.RightMoveDirection : Constants.LeftMoveDirection);
     }
 
     public virtual void Enter() 
     {
-        _enemy.SetMoveDirection(_enemy.Renderer.flipX ? _rightMoveDirection : _leftMoveDirection);
+        _enemy.SetMoveDirection(_enemy.Renderer.flipX ? Constants.RightMoveDirection : Constants.LeftMoveDirection);
     }
 
     public virtual void Exit() { }
 
     public virtual void Update() 
     {
-        DrawRaycst();
+        DrawRaycast();
 
-        if (_enemy.transform.localPosition.x <= _lastPosition.x && _enemy.MoveDirectoin == _leftMoveDirection)
+        if (_enemy.transform.localPosition.x <= _lastPosition.x && _enemy.MoveDirectoin == Constants.LeftMoveDirection)
         {
             _enemy.Renderer.flipX = true;
-            _enemy.SetMoveDirection(_rightMoveDirection);
+            _enemy.SetMoveDirection(Constants.RightMoveDirection);
             _enemy.AttackAria.offset = new Vector2(_enemy.AttackAria.offset.x * _flip, _enemy.AttackAria.offset.y);
         }
-        else if (_enemy.transform.localPosition.x > _lastPosition.x && _enemy.MoveDirectoin == _rightMoveDirection)
+        else if (_enemy.transform.localPosition.x > _lastPosition.x && _enemy.MoveDirectoin == Constants.RightMoveDirection)
         {
             _enemy.Renderer.flipX = false;
-            _enemy.SetMoveDirection(_leftMoveDirection);
+            _enemy.SetMoveDirection(Constants.LeftMoveDirection);
             _enemy.AttackAria.offset = new Vector2(_enemy.AttackAria.offset.x * _flip, _enemy.AttackAria.offset.y);
         }
 
         _lastPosition = _enemy.transform.localPosition;
     }
 
-    public virtual void DrawRaycst() 
+    public virtual void DrawRaycast() 
     {
         Collider2D collider = Physics2D.OverlapCircle(_enemy.transform.position, _radiusFOV, _enemy.TargetLayer);
 

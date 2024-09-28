@@ -6,7 +6,7 @@ public class Coin : MonoBehaviour, ITakerObject
 {
     public event Action<Coin> Collected;
 
-    public void Get(GameObject taker)
+    public void TakeObject()
     {
         gameObject.SetActive(false);
         Collected?.Invoke(this);

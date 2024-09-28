@@ -62,9 +62,9 @@ public class PatrollingState : State
         NextPlace = _places[_placePointIndex];
     }
 
-    public override void DrawRaycst()
+    public override void DrawRaycast()
     {
-        base.DrawRaycst();
+        base.DrawRaycast();
 
         if (_isHited)
         {

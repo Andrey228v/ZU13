@@ -30,9 +30,9 @@ public class AttackState : State
         _enemy.transform.position = Vector3.MoveTowards(_enemy.transform.position, _enemy.Target.GetPosition(), _enemy.Speed * Time.deltaTime);
     }
 
-    public override void DrawRaycst()
+    public override void DrawRaycast()
     {
-        base.DrawRaycst();
+        base.DrawRaycast();
 
         if (_isHited)
         {
@@ -61,16 +61,12 @@ public class AttackState : State
 
         if (collider.TryGetComponent(out IMoveUnit body))
         {
-            _enemy.SetDamageDirection(-body.MoveDirectoin);
+            _enemy.SetDamageDirection(_enemy.MoveDirectoin);
 
             if (collider.TryGetComponent(out IDamageTaker target))
             {
-                target.GetDamage(_enemy.Damage);
-
-                if (collider.TryGetComponent(out ITypeDamage typeDamage))
-                {
-                    typeDamage.AttackDealer(_enemy);
-                }
+                _enemy.Attack(target);
+                target.GetDamage(_enemy);
             }
         }
     }

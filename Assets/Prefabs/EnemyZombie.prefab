@@ -298,7 +298,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 10
+  m_Mass: 200
   m_LinearDrag: 2
   m_AngularDrag: 0.3
   m_GravityScale: 4
@@ -385,7 +385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 790188955f9aee543af0e02b1444658b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _repulsionForce: {x: 50, y: 50}
+  _repulsionForce: {x: 200, y: 50}
 --- !u!1 &7500162033120617816
 GameObject:
   m_ObjectHideFlags: 0

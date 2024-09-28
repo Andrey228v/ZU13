@@ -2,9 +2,7 @@
 {
     public enum PlayerStateType
     {
-        Stay = 0,
         Movement = 1,
-        Jump = 2,
-        Attack = 3,
+        Attack = 2,
     }
 }

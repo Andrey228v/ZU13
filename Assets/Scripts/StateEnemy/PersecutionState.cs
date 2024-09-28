@@ -29,9 +29,9 @@ public class PersecutionState : State
         _enemy.transform.position = Vector3.MoveTowards(_enemy.transform.position, _enemy.Target.GetPosition(), _enemy.Speed * Time.deltaTime);
     }
 
-    public override void DrawRaycst()
+    public override void DrawRaycast()
     {
-        base.DrawRaycst();
+        base.DrawRaycast();
 
         if (_isHited) 
         {

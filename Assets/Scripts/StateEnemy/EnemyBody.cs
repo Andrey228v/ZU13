@@ -21,6 +21,7 @@ public class EnemyBody : MonoBehaviour, IDamageDealer, IDamageTaker, IMoveUnit
     private string _currentStateText;
     private Vector2 _velocity;
 
+    public ITypeDamage TypeDamage { get; private set; }
     public SpriteRenderer Renderer { get; private set; }
     public Animator Animator { get; private set; }
     public Transform PatrolRoute { get; private set; }
@@ -38,7 +39,6 @@ public class EnemyBody : MonoBehaviour, IDamageDealer, IDamageTaker, IMoveUnit
     public Vector2 MoveDirectoin { get; private set; }
     public Rigidbody2D Rigidbody {get; private set;}
     public int Damage { get; private set; }
-    public float AttackSpeed { get; private set; }
     public Vector2 DamageDirection { get; private set; }
 
     private void Awake()
@@ -46,6 +46,7 @@ public class EnemyBody : MonoBehaviour, IDamageDealer, IDamageTaker, IMoveUnit
         Renderer = GetComponent<SpriteRenderer>();
         Animator = GetComponent<Animator>();
         Rigidbody = GetComponent<Rigidbody2D>();
+        TypeDamage = GetComponent<ITypeDamage>();
 
         Damage = _damage;
     }
@@ -144,12 +145,15 @@ public class EnemyBody : MonoBehaviour, IDamageDealer, IDamageTaker, IMoveUnit
 
     public void SetAttackDistance(float attackDistance) { AttackDistance = attackDistance; }
 
-    public void SetAttackSpeed(float attackSpeed) { AttackSpeed = attackSpeed; }
-
-    public void GetDamage(int damage) 
+    public void Attack(IDamageTaker damageTaker) 
     {
-        _health -= damage;
+        TypeDamage.HitDamageType(this, damageTaker);
+    }
 
+    public void GetDamage(IDamageDealer damageDealer) 
+    {
+        _health -= damageDealer.Damage;
+        
         if (_health < 0)
         {
             _health = 0;

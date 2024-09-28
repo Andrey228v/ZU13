@@ -12,11 +12,8 @@ public class HealKit : MonoBehaviour, ITakerObject
         HealthPoints = _healthPoints;
     }
 
-    public void Get(GameObject taker)
+    public void TakeObject()
     {
-        if (taker.TryGetComponent(out IHealthTaker healthTaker))
-        {
-            healthTaker.TakeHealth(this);
-        }
+        Destroy(gameObject);
     }
 }

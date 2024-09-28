@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Assets.Scripts.StateEnemy
+﻿namespace Assets.Scripts.StateEnemy
 {
     public class StateMachine
     {
