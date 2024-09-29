@@ -4,21 +4,19 @@ namespace Assets.Scripts.PlayerState
 {
     public class StateMachinePlayer
     {
-        public StatePlayer CurrentState { get; private set; }
-        public StatePlayer PastState { get; private set; }
-
-        public MovementState MovementState { get; private set; }
-        public AttackStatePlayer AttackStatePlayer { get; private set; }
-
         public StateMachinePlayer(Player player)
         {
             MovementState = new MovementState(player);
             AttackStatePlayer = new AttackStatePlayer(player);
         }
 
+        public StatePlayer CurrentState { get; private set; }
+        public StatePlayer PastState { get; private set; }
+        public MovementState MovementState { get; private set; }
+        public AttackStatePlayer AttackStatePlayer { get; private set; }
+
         public void Initialize(PlayerStateType stateType)
         {
-
             CurrentState = MovementState;
             CurrentState.Enter();
         }

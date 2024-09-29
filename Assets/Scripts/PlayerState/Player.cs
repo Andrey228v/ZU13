@@ -3,51 +3,41 @@ using Assets.Scripts.Service;
 using UnityEngine;
 
 [RequireComponent(typeof(DamageWithRepulsion), typeof(Animator), typeof(Rigidbody2D))]
-[RequireComponent(typeof(CapsuleCollider2D), typeof(IUserInput))]
-public class Player : MonoBehaviour, IDamageDealer, IHealthTaker, IDamageTaker, ITarget, IMoveUnit, ITaker
+[RequireComponent(typeof(CapsuleCollider2D), typeof(IUserInput), typeof(IDamageDealer))]
+[RequireComponent(typeof(IJump), typeof(IMoveUnit))]
+public class Player : MonoBehaviour, IHealthTaker, IDamageTaker, ITarget
 {
     [SerializeField] private int _health;
     [SerializeField] private int _maxHealth;
-    [SerializeField] private int _damage;
-    [SerializeField] private float _maxSpeed;
-    [SerializeField] private float _jumpForceY;
-    [SerializeField] private float _jumpForceX;
     [SerializeField] private BoxCollider2D _attackAria;
 
-    private string CurrentStateText;
-
+    public IDamageDealer DamageDealer { get; private set; }
     public IUserInput UserInput { get; private set; }
-    public ITypeDamage TypeDamage { get; private set; }
+    public IJump Jump { get; private set; }
+    public IMoveUnit Move { get; private set; }
     public SpriteRenderer Renderer { get; private set; }
     public Animator Animator { get; private set; }
     public Rigidbody2D Rigidbody { get; private set; }
     public CapsuleCollider2D PlayerCollider { get; private set; }
     public StateMachinePlayer StateMachinePlayer { get; private set; }
-    public float JumpForceY { get; private set; }
-    public float JumpForceX { get; private set; }
-    public bool OnGroundedTest {  get; private set; }
+    public BoxCollider2D AttackAria { get; private set; }
     public Vector2 DirectionView {  get; private set; }
-    public Vector2 CurrentSpeed { get; private set; }
-    public float Speed { get; private set; }
-    public int Damage { get; private set; }
-    public float AttackDistance { get; private set; }
-    public Vector2 DamageDirection { get; private set; }
-    public Vector2 MoveDirectoin { get; private set; }
 
     private void Awake()
     {
         UserInput = GetComponent<IUserInput>();
+        Jump = GetComponent<IJump>();
+        DamageDealer = GetComponent<IDamageDealer>();
+        Move = GetComponent<IMoveUnit>();
         Renderer = GetComponent<SpriteRenderer>();
         Animator = GetComponent<Animator>();
         Rigidbody = GetComponent<Rigidbody2D>();
         PlayerCollider = GetComponent<CapsuleCollider2D>();
-        TypeDamage = GetComponent<ITypeDamage>();
-
-        Damage = _damage;
     }
 
     private void Start()
     {
+        AttackAria = _attackAria;
         StateMachinePlayer = new StateMachinePlayer(this);
         PlayerStateType startState = PlayerStateType.Movement;
         StateMachinePlayer.Initialize(startState);
@@ -60,15 +50,7 @@ public class Player : MonoBehaviour, IDamageDealer, IHealthTaker, IDamageTaker, 
 
     private void FixedUpdate()
     {
-        JumpForceY = _jumpForceY;
-        JumpForceX = _jumpForceX;
         DirectionView = (Renderer.flipX) ? Constants.RightMoveDirection : Constants.LeftMoveDirection;
-        CurrentSpeed = Rigidbody.velocity;
-        Speed = _maxSpeed;
-        CurrentStateText = StateMachinePlayer.CurrentState.ToString();
-
-        OnGroundedTest = OnGrounded();
-
         StateMachinePlayer.CurrentState.FixedUpdate();
     }
 
@@ -96,6 +78,7 @@ public class Player : MonoBehaviour, IDamageDealer, IHealthTaker, IDamageTaker, 
     {
         GetComponent<SpriteRenderer>().color = Color.red;
     }
+
     public void UndetectedByEnemy()
     {
         GetComponent<SpriteRenderer>().color = Color.white;
@@ -109,23 +92,6 @@ public class Player : MonoBehaviour, IDamageDealer, IHealthTaker, IDamageTaker, 
 
         return (hit.collider != null) ? true : false;
     }
-
-    public void SetDamage(int damage) 
-    {
-        Damage = damage;
-    }
-
-    public void SetDamageDirection(Vector2 damageDirection) 
-    {
-        DamageDirection = damageDirection;
-    }
-
-    public void SetMoveDirection(Vector2 moveDirectoin)
-    {
-        MoveDirectoin = moveDirectoin;
-    }
-
-    public void SetAttackDistance(float attackDistance) { }
 
     public void TakeHealth(HealKit healthKit) 
     {
@@ -142,11 +108,6 @@ public class Player : MonoBehaviour, IDamageDealer, IHealthTaker, IDamageTaker, 
         }
     }
 
-    public void Attack(IDamageTaker damageTaker) 
-    {
-        TypeDamage.HitDamageType(this, damageTaker);
-    }
-
     public void GetDamage(IDamageDealer damageDealer)
     {
         _health -= damageDealer.Damage;
@@ -158,13 +119,11 @@ public class Player : MonoBehaviour, IDamageDealer, IHealthTaker, IDamageTaker, 
 
         if(_health == 0)
         {
-            Destroy(gameObject);
+           Destroy(gameObject);
         }
     }
 
-    public void SetSpeed(float speed) { Speed = speed; }
-
-    public Vector2 GetPosition() 
+    public Vector2 GetPosition()
     {
         return transform.position;
     }

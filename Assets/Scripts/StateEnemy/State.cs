@@ -3,30 +3,27 @@ using UnityEngine;
 
 public abstract class State
 {
-    protected EnemyBody _enemy;
-    protected RaycastHit2D _hit;
-    protected float _radiusFOV;
-    
-    protected bool _isHited = false;
-    protected bool isPlayerFound = false;
-    protected ITarget _player;
-    protected Vector3 _lastPosition;
-
+    protected EnemyBody Enemy;
+    protected RaycastHit2D Hit;
+    protected float RadiusFOV;
+    protected bool IsHited = false;
+    protected bool IsPlayerFound = false;
+    protected ITarget Player;
+    protected Vector3 LastPosition;
     private Color _rayColor;
     private Color _inHitColor = Color.yellow;
     private Color _outHitColor = Color.red;
-    private int _flip = -1;
-
+    
     public State(EnemyBody enemy, float radiusFOV)
     {
-        _enemy = enemy;
-        _radiusFOV = radiusFOV;
-        _enemy.SetMoveDirection(_enemy.Renderer.flipX ? Constants.RightMoveDirection : Constants.LeftMoveDirection);
+        Enemy = enemy;
+        RadiusFOV = radiusFOV;
+        Enemy.Move.SetMoveDirection(Enemy.Renderer.flipX ? Constants.RightMoveDirection : Constants.LeftMoveDirection);
     }
 
     public virtual void Enter() 
     {
-        _enemy.SetMoveDirection(_enemy.Renderer.flipX ? Constants.RightMoveDirection : Constants.LeftMoveDirection);
+        Enemy.Move.SetMoveDirection(Enemy.Renderer.flipX ? Constants.RightMoveDirection : Constants.LeftMoveDirection);
     }
 
     public virtual void Exit() { }
@@ -35,42 +32,42 @@ public abstract class State
     {
         DrawRaycast();
 
-        if (_enemy.transform.localPosition.x <= _lastPosition.x && _enemy.MoveDirectoin == Constants.LeftMoveDirection)
+        if (Enemy.transform.localPosition.x <= LastPosition.x && Enemy.Move.MoveDirection == Constants.LeftMoveDirection)
         {
-            _enemy.Renderer.flipX = true;
-            _enemy.SetMoveDirection(Constants.RightMoveDirection);
-            _enemy.AttackAria.offset = new Vector2(_enemy.AttackAria.offset.x * _flip, _enemy.AttackAria.offset.y);
+            Enemy.Renderer.flipX = true;
+            Enemy.Move.SetMoveDirection(Constants.RightMoveDirection);
+            Enemy.AttackAria.offset = new Vector2(Enemy.AttackAria.offset.x * Constants.Flip, Enemy.AttackAria.offset.y);
         }
-        else if (_enemy.transform.localPosition.x > _lastPosition.x && _enemy.MoveDirectoin == Constants.RightMoveDirection)
+        else if (Enemy.transform.localPosition.x > LastPosition.x && Enemy.Move.MoveDirection == Constants.RightMoveDirection)
         {
-            _enemy.Renderer.flipX = false;
-            _enemy.SetMoveDirection(Constants.LeftMoveDirection);
-            _enemy.AttackAria.offset = new Vector2(_enemy.AttackAria.offset.x * _flip, _enemy.AttackAria.offset.y);
+            Enemy.Renderer.flipX = false;
+            Enemy.Move.SetMoveDirection(Constants.LeftMoveDirection);
+            Enemy.AttackAria.offset = new Vector2(Enemy.AttackAria.offset.x * Constants.Flip, Enemy.AttackAria.offset.y);
         }
 
-        _lastPosition = _enemy.transform.localPosition;
+        LastPosition = Enemy.transform.localPosition;
     }
 
     public virtual void DrawRaycast() 
     {
-        Collider2D collider = Physics2D.OverlapCircle(_enemy.transform.position, _radiusFOV, _enemy.TargetLayer);
+        Collider2D collider = Physics2D.OverlapCircle(Enemy.transform.position, RadiusFOV, Enemy.TargetLayer);
 
         if (collider != null)
         {
-            _hit = Physics2D.Raycast(_enemy.EyePosition.position, collider.gameObject.transform.position - _enemy.EyePosition.position, Vector3.Distance(_enemy.EyePosition.position, collider.gameObject.transform.position));
+            Hit = Physics2D.Raycast(Enemy.EyePosition.position, collider.gameObject.transform.position - Enemy.EyePosition.position, Vector3.Distance(Enemy.EyePosition.position, collider.gameObject.transform.position));
 
-            isPlayerFound = _hit.collider.TryGetComponent(out ITarget player);
+            IsPlayerFound = Hit.collider.TryGetComponent(out ITarget player);
 
-            _rayColor = isPlayerFound? _inHitColor: _outHitColor;
+            _rayColor = IsPlayerFound? _inHitColor: _outHitColor;
 
-            Debug.DrawRay(_enemy.EyePosition.position, collider.gameObject.transform.position - _enemy.EyePosition.position, _rayColor);
+            Debug.DrawRay(Enemy.EyePosition.position, collider.gameObject.transform.position - Enemy.EyePosition.position, _rayColor);
 
-            _player = player;
-            _isHited = true;
+            Player = player;
+            IsHited = true;
         }
         else
         {
-            _isHited = false;
+            IsHited = false;
         }
     }
 

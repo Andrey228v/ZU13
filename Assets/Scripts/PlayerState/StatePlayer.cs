@@ -5,26 +5,26 @@ namespace Assets.Scripts.PlayerState
 {
     public abstract class StatePlayer
     {
-        protected Player _player;
-        protected float _horizontalMove = 0f;
-        protected bool _lastDirection;
+        protected Player Player;
+        protected float HorizontalMove = 0f;
+        protected bool LastDirection;
 
         public StatePlayer(Player player)
         {
-            _player = player;
+            Player = player;
         }
 
         public virtual void Enter() 
         {
-            _lastDirection = _player.Renderer.flipX;
+            LastDirection = Player.Renderer.flipX;
 
-            if (_player.Renderer.flipX == true)
+            if (Player.Renderer.flipX == true)
             {
-                _player.SetMoveDirection(Constants.LeftMoveDirection);
+                Player.Move.SetMoveDirection(Constants.LeftMoveDirection);
             }
             else
             {
-                _player.SetMoveDirection(Constants.RightMoveDirection);
+                Player.Move.SetMoveDirection(Constants.RightMoveDirection);
             }
         }
 
@@ -32,35 +32,35 @@ namespace Assets.Scripts.PlayerState
 
         public virtual void Update() 
         {
-            _horizontalMove = Input.GetAxis(Constants.AxisHorizontal);
+            HorizontalMove = Player.UserInput.HorizontalMove;
 
-            if (_player.UserInput.Jump && _player.OnGrounded())
+            if (Player.UserInput.Jump && Player.OnGrounded())
             {
-                _player.Rigidbody.AddForce(new Vector2(_player.JumpForceX * _player.DirectionView.x, _player.JumpForceY), ForceMode2D.Impulse);
+                Player.Jump.Action(Player.Move.MoveDirection);
             }
         }
 
         public virtual void FixedUpdate() 
         {
-            if (_horizontalMove < 0f)
+            if (HorizontalMove < 0f)
             {
-                _lastDirection = true;
-                _player.SetMoveDirection(Constants.RightMoveDirection);
+                LastDirection = true;
+                Player.Move.SetMoveDirection(Constants.LeftMoveDirection);
             }
-            else if (_horizontalMove > 0f)
+            else if (HorizontalMove > 0f)
             {
-                _lastDirection = false;
-                _player.SetMoveDirection(Constants.LeftMoveDirection);
-            }
-
-            if (_lastDirection != _player.Renderer.flipX)
-            {
-                _player.Renderer.flipX = (_horizontalMove < 0f) ? true : false;
+                LastDirection = false;
+                Player.Move.SetMoveDirection(Constants.RightMoveDirection);
             }
 
-            _player.Animator.SetFloat(PlayerAnimations.AnimatorParameterSpeed, Mathf.Abs(_horizontalMove));
-            Vector2 targetForce = new Vector2(_horizontalMove * _player.Speed, _player.Rigidbody.velocity.y);
-            _player.Rigidbody.AddForce(targetForce, ForceMode2D.Impulse);
+            if (LastDirection != Player.Renderer.flipX)
+            {
+                Player.Renderer.flipX = (HorizontalMove < 0f) ? true : false;
+                Player.AttackAria.offset = new Vector2(Player.AttackAria.offset.x * Constants.Flip, Player.AttackAria.offset.y);
+            }
+
+            Player.Animator.SetFloat(PlayerAnimations.AnimatorParameterSpeed, Mathf.Abs(HorizontalMove));
+            Player.Move.Action(new Vector2(HorizontalMove, 0));
         }
 
         public virtual void TriggerEnter(Collider2D collider) { }

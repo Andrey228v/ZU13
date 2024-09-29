@@ -6,12 +6,25 @@ namespace Assets.Scripts.Service.DamageDealer
     {
         [SerializeField] private int _damage;
         [SerializeField] private int _attackDistance;
-        [SerializeField] private int _AttackSpeed;
 
         public int Damage {get; private set;}
         public float AttackDistance { get; private set; }
         public Vector2 DamageDirection { get; private set; }
         public ITypeDamage TypeDamage { get; private set; }
+
+        private void Awake()
+        {
+            Damage = _damage;
+            AttackDistance = _attackDistance;
+
+            TypeDamage = GetComponent<ITypeDamage>();
+        }
+
+        private void Update()
+        {
+            Damage = _damage;
+            AttackDistance = _attackDistance;
+        }
 
         public void Attack(IDamageTaker damageTaker)
         {
