@@ -1,75 +1,74 @@
+using Assets.Scripts.Service;
 using UnityEngine;
 
 public class PersecutionState : State
 {
-    private const string AnimatorParameterPersecution = "Persecution";
-
     public PersecutionState(EnemyBody enemy, float radiusFOV) : base(enemy, radiusFOV) 
     {
-        _radiusFOV = radiusFOV;
+        RadiusFOV = radiusFOV;
     }
 
     public override void Enter()
     {
         base.Enter();
 
-        _enemy.Animator.SetBool(AnimatorParameterPersecution, true);
+        Enemy.Animator.SetBool(EnemyAnimations.AnimatorParameterPersecution, true);
     }
 
     public override void Exit()
     {
         base.Exit();
-        _enemy.Animator.SetBool(AnimatorParameterPersecution, false);
+        Enemy.Animator.SetBool(EnemyAnimations.AnimatorParameterPersecution, false);
     }
 
     public override void Update()
     {
         base.Update();
 
-        _enemy.transform.position = Vector3.MoveTowards(_enemy.transform.position, _enemy.Target.GetPosition(), _enemy.Speed * Time.deltaTime);
+        Enemy.Move.Action(Enemy.Target.GetPosition());
     }
 
     public override void DrawRaycast()
     {
         base.DrawRaycast();
 
-        if (_isHited) 
+        if (IsHited) 
         {
-            if (_hit.collider != null && _enemy.IsTargetInFOV == true)
+            if (Hit.collider != null && Enemy.IsTargetInFOV == true)
             {
-                if (isPlayerFound == false)
+                if (IsPlayerFound == false)
                 {
-                    _enemy.Target.UndetectedByEnemy();
-                    _enemy.SetTargetInFOV(false);
-                    _enemy.ChangeState(EnemyStateType.Patrolling);
+                    Enemy.Target.UndetectedByEnemy();
+                    Enemy.SetTargetInFOV(false);
+                    Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
                 }
-                if (_hit.distance < _enemy.AttackDistance)
+                if (Hit.distance < Enemy.DamageDealer.AttackDistance)
                 {
-                    _enemy.ChangeState(EnemyStateType.Attack);
+                    Enemy.StateMachine.SelectState(EnemyStateType.Attack);
                 }
             }
 
-            else if (_hit.collider != null && _enemy.IsTargetInFOV == false)
+            else if (Hit.collider != null && Enemy.IsTargetInFOV == false)
             {
-                _enemy.Target.UndetectedByEnemy();
-                _enemy.ChangeState(EnemyStateType.Patrolling);
+                Enemy.Target.UndetectedByEnemy();
+                Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
             }
         }
-        else if (_enemy.IsTargetInFOV == true)
+        else if (Enemy.IsTargetInFOV == true)
         {
-            _enemy.Target.UndetectedByEnemy();
-            _enemy.SetTargetInFOV(false);
-            _enemy.ChangeState(EnemyStateType.Patrolling);
+            Enemy.Target.UndetectedByEnemy();
+            Enemy.SetTargetInFOV(false);
+            Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
         }
-        else if( _enemy.IsTargetInFOV == false)
+        else if( Enemy.IsTargetInFOV == false)
         {
-            _enemy.Target.UndetectedByEnemy();
-            _enemy.ChangeState(EnemyStateType.Patrolling);
+            Enemy.Target.UndetectedByEnemy();
+            Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
         }
     }
 
     public override void DrawGizmos()
     {
-        Gizmos.DrawWireSphere(_enemy.transform.position, _radiusFOV);
+        Gizmos.DrawWireSphere(Enemy.transform.position, RadiusFOV);
     }
 }

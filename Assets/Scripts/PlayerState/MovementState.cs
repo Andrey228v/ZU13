@@ -8,9 +8,9 @@ public class MovementState : StatePlayer
     {
         base.Update();
  
-        if (_player.UserInput.Attack) 
+        if (Player.UserInput.Attack) 
         {
-            _player.StateMachinePlayer.SelectState(PlayerStateType.Attack);
+            Player.StateMachinePlayer.SelectState(PlayerStateType.Attack);
         }
     }
 }

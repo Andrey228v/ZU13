@@ -4,55 +4,53 @@ public class PatrollingState : State
 {
     private Transform[] _places;
     private int _placePointIndex = 0;
-
-    public Transform NextPlace { get; private set; }
-
-    private float _distanceError = 0.1f;
+    private float _distanceError = 0.2f;
     private float _distanceDeviationFromZone = -1;
-
     public PatrollingState(EnemyBody enemy, float radiusFOV) : base(enemy, radiusFOV) 
     {
-        _radiusFOV = radiusFOV;
+        RadiusFOV = radiusFOV;
     }
+
+    public Transform NextPlace { get; private set; }
 
     public override void Enter()
     {
         base.Enter();
 
-        _places = new Transform[_enemy.PatrolRoute.childCount];
+        _places = new Transform[Enemy.PatrolRoute.childCount];
 
-        for (int i = 0; i < _enemy.PatrolRoute.childCount; i++)
+        for (int i = 0; i < Enemy.PatrolRoute.childCount; i++)
         {
-            _places[i] = _enemy.PatrolRoute.GetChild(i);
+            _places[i] = Enemy.PatrolRoute.GetChild(i);
         }
 
-        _enemy.transform.position = _places[0].position;
-        _lastPosition = _enemy.transform.position;
+        Enemy.transform.position = _places[0].position;
+        LastPosition = Enemy.transform.position;
         NextPlace = _places[_placePointIndex];
     }
 
     public override void Exit()
     {
         base.Exit();
-        _lastPosition = _places[0].position;
+        LastPosition = _places[0].position;
     }
 
     public override void Update()
     {
         base.Update();
 
-        if (Vector3.Distance(_enemy.transform.position, NextPlace.position) > _distanceError)
+        if (Mathf.Abs(Vector3.Distance(Enemy.transform.position, NextPlace.position)) > _distanceError)
         {
-            _enemy.transform.position = Vector3.MoveTowards(_enemy.transform.position, NextPlace.position, _enemy.Speed * Time.deltaTime);
+            Enemy.Move.Action(NextPlace.position);
         }
         else
         {
             NextPoint();
         }
 
-        if(_enemy.transform.position.y - _places[0].position.y < _distanceDeviationFromZone)
+        if(Enemy.transform.position.y - _places[0].position.y < _distanceDeviationFromZone)
         {
-            _enemy.transform.position = _places[0].position;
+            Enemy.transform.position = _places[0].position;
         }
     }
 
@@ -66,29 +64,29 @@ public class PatrollingState : State
     {
         base.DrawRaycast();
 
-        if (_isHited)
+        if (IsHited)
         {
-            if (_hit.collider != null && _enemy.IsTargetInFOV == false)
+            if (Hit.collider != null && Enemy.IsTargetInFOV == false)
             {
-                if (isPlayerFound)
+                if (IsPlayerFound)
                 {
-                    _player.DetectedByEnemy();
-                    _enemy.SetTargetInFOV(true);
-                    _enemy.SetTargetPlayer(_player);
+                    Player.DetectedByEnemy();
+                    Enemy.SetTargetInFOV(true);
+                    Enemy.SetTargetPlayer(Player);
 
-                    _enemy.ChangeState(EnemyStateType.Persecution);
+                    Enemy.StateMachine.SelectState(EnemyStateType.Persecution);
                 }
             }
         }
-        else if (_enemy.IsTargetInFOV == true)
+        else if (Enemy.IsTargetInFOV == true)
         {
-            _enemy.Target.UndetectedByEnemy();
-            _enemy.SetTargetInFOV(false);
+            Enemy.Target.UndetectedByEnemy();
+            Enemy.SetTargetInFOV(false);
         }
     }
 
     public override void DrawGizmos()
     {
-        Gizmos.DrawWireSphere(_enemy.transform.position, _radiusFOV);
+        Gizmos.DrawWireSphere(Enemy.transform.position, RadiusFOV);
     }
 }

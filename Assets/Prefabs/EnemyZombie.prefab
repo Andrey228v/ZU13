@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3487417176546491245}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EnemyZombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 387950591368739060}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Eye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8599212018043428014}
   - component: {fileID: 5448512910638283551}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AttackAria
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3450529564024896681}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Route
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,6 +189,8 @@ GameObject:
   - component: {fileID: 7801546293092206762}
   - component: {fileID: 6090779010264156860}
   - component: {fileID: 8741001144028564128}
+  - component: {fileID: 5056592052638213263}
+  - component: {fileID: 60537715701120506}
   m_Layer: 8
   m_Name: BodyZombie
   m_TagString: Untagged
@@ -362,14 +364,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 50
   _maxHealth: 50
-  _damage: 5
   _patrolRoute: {fileID: 3450529564024896681}
   _eyePosition: {fileID: 387950591368739060}
-  _speed: 2
+  _attackAria: {fileID: 5448512910638283551}
   _targetLayer:
     serializedVersion: 2
     m_Bits: 128
-  _attackAria: {fileID: 5448512910638283551}
   _radiusFOVPatrolling: 5
   _radiusFOVPersecution: 10
   _radiusFOVAttack: 2
@@ -386,6 +386,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _repulsionForce: {x: 200, y: 50}
+--- !u!114 &5056592052638213263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6242896850127527317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48840970053ec9543a247daf2baae887, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxSpeed: 2
+--- !u!114 &60537715701120506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6242896850127527317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68b8278dc09368348b3e60a1f8d50a11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 10
+  _attackDistance: 2
 --- !u!1 &7500162033120617816
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,7 +422,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1453755194881813053}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Path1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -426,7 +453,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1417523173334111066}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Path2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

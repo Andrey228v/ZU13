@@ -13,7 +13,7 @@ namespace Assets.Scripts.PlayerState
         {
             base.Enter();
 
-            _player.Animator.SetBool(PlayerAnimations.AnimatorParameterAttack, true);
+            Player.Animator.SetBool(PlayerAnimations.AnimatorParameterAttack, true);
             _isAttack = false;
         }
 
@@ -21,7 +21,7 @@ namespace Assets.Scripts.PlayerState
         {
             base.Exit();
 
-            _player.Animator.SetBool(PlayerAnimations.AnimatorParameterAttack, false);
+            Player.Animator.SetBool(PlayerAnimations.AnimatorParameterAttack, false);
         }
 
         public override void Update() 
@@ -30,7 +30,7 @@ namespace Assets.Scripts.PlayerState
 
             if (IsAnimationPlaying() == false)
             {
-                _player.StateMachinePlayer.ChangeState(_player.StateMachinePlayer.PastState);
+                Player.StateMachinePlayer.ChangeState(Player.StateMachinePlayer.PastState);
             }
         }
 
@@ -42,12 +42,14 @@ namespace Assets.Scripts.PlayerState
 
                 if (collider.TryGetComponent(out IMoveUnit body))
                 {
-                    _player.SetDamageDirection(-body.MoveDirectoin);
+                    Player.DamageDealer.SetDamageDirection(-Player.Move.MoveDirection);
 
                     if (collider.TryGetComponent(out IDamageTaker target))
                     {
-                        _player.Attack(target);
-                        target.GetDamage(_player);
+                        Debug.Log("Test");
+
+                        Player.DamageDealer.Attack(target);
+                        target.GetDamage(Player.DamageDealer);
                         _isAttack = true;
                     }
                 }
@@ -56,7 +58,7 @@ namespace Assets.Scripts.PlayerState
 
         public bool IsAnimationPlaying()
         {
-            AnimatorStateInfo animationStateInfo = _player.Animator.GetCurrentAnimatorStateInfo(0);
+            AnimatorStateInfo animationStateInfo = Player.Animator.GetCurrentAnimatorStateInfo(0);
 
             return animationStateInfo.IsName(PlayerAnimations.AnimationNameAttack) && animationStateInfo.normalizedTime < 1.0f;
         }
