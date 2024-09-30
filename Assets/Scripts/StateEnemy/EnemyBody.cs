@@ -97,8 +97,6 @@ public class EnemyBody : MonoBehaviour, IDamageTaker
     {
         _health -= damageDealer.Damage;
 
-        Debug.Log(damageDealer.Damage);
-
         if (_health < 0)
         {
             _health = 0;
