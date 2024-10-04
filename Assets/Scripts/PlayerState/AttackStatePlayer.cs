@@ -6,6 +6,7 @@ namespace Assets.Scripts.PlayerState
     public class AttackStatePlayer : StatePlayer
     {
         private bool _isAttack = false;
+        private Attack _attack = new Attack();
 
         public AttackStatePlayer(Player player) : base(player){}
 
@@ -36,23 +37,25 @@ namespace Assets.Scripts.PlayerState
 
         public override void TriggerEnter(Collider2D collider)
         {
+            base.TriggerEnter(collider);
+
             if (_isAttack == false)
             {
-                base.TriggerEnter(collider);
+                //Player.DamageDealer.SetDamageDirection(-Player.Move.MoveDirection);
 
-                if (collider.TryGetComponent(out IMoveUnit body))
-                {
-                    Player.DamageDealer.SetDamageDirection(-Player.Move.MoveDirection);
+                //if (collider.TryGetComponent(out IHealth targetHealth))
+                //{
+                //    targetHealth.GetDamage(Player.DamageDealer.Damage);
+                //    _isAttack = true;
+                //}
 
-                    if (collider.TryGetComponent(out IDamageTaker target))
-                    {
-                        Debug.Log("Test");
+                //if(collider.TryGetComponent(out IDamagable target))
+                //{
+                //    Player.DamageDealer.Attack(target);
+                //}
+                _attack.SetAttack(Player, collider);
 
-                        Player.DamageDealer.Attack(target);
-                        target.GetDamage(Player.DamageDealer);
-                        _isAttack = true;
-                    }
-                }
+                //_isAttack = true;
             }
         }
 

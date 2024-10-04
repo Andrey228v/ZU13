@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class AttackState : State
 {
+    private bool _isAttack = false;
+    private Attack _attack = new Attack();
+
     public AttackState(EnemyBody enemy, float radiusFOV) : base(enemy, radiusFOV) 
     {
         RadiusFOV = radiusFOV;
@@ -13,6 +16,7 @@ public class AttackState : State
         base.Enter();
 
         Enemy.Animator.SetBool(EnemyAnimations.AnimatorParameterAttack, true);
+        _isAttack = false;
     }
 
     public override void Exit()
@@ -57,15 +61,24 @@ public class AttackState : State
     {
         base.TriggerEnter(collider);
 
-        if (collider.TryGetComponent(out IMoveUnit body))
+        if (_isAttack == false)
         {
-            Enemy.DamageDealer.SetDamageDirection(Enemy.Move.MoveDirection);
+            //Enemy.DamageDealer.SetDamageDirection(Enemy.Move.MoveDirection);
 
-            if (collider.TryGetComponent(out IDamageTaker target))
-            {
-                Enemy.DamageDealer.Attack(target);
-                target.GetDamage(Enemy.DamageDealer);
-            }
+            //if (collider.TryGetComponent(out IHealth targetHealth))
+            //{
+            //    targetHealth.GetDamage(Enemy.DamageDealer.Damage);
+            //    _isAttack = true;
+            //}
+
+            //if (collider.TryGetComponent(out IDamagable target))
+            //{
+            //    Enemy.DamageDealer.Attack(target);
+            //}
+
+            _attack.SetAttack(Enemy, collider);
+
+            //_isAttack = true;
         }
     }
     

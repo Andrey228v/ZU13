@@ -17,15 +17,7 @@ namespace Assets.Scripts.PlayerState
         public virtual void Enter() 
         {
             LastDirection = Player.Renderer.flipX;
-
-            if (Player.Renderer.flipX == true)
-            {
-                Player.Move.SetMoveDirection(Constants.LeftMoveDirection);
-            }
-            else
-            {
-                Player.Move.SetMoveDirection(Constants.RightMoveDirection);
-            }
+            Player.Move.SetMoveDirection(Player.Renderer.flipX ? Constants.LeftMoveDirection : Constants.RightMoveDirection);
         }
 
         public virtual void Exit() { }
@@ -34,10 +26,12 @@ namespace Assets.Scripts.PlayerState
         {
             HorizontalMove = Player.UserInput.HorizontalMove;
 
-            if (Player.UserInput.Jump && Player.OnGrounded())
+            if (Player.UserInput.Jump && OnGrounded())
             {
                 Player.Jump.Action(Player.Move.MoveDirection);
             }
+
+            Debug.DrawRay(Player.transform.position, Player.Move.MoveDirection.normalized, Color.black);
         }
 
         public virtual void FixedUpdate() 
@@ -56,7 +50,7 @@ namespace Assets.Scripts.PlayerState
             if (LastDirection != Player.Renderer.flipX)
             {
                 Player.Renderer.flipX = (HorizontalMove < 0f) ? true : false;
-                Player.AttackAria.offset = new Vector2(Player.AttackAria.offset.x * Constants.Flip, Player.AttackAria.offset.y);
+                Player.DamageDealer.AttackAria.offset = new Vector2(Player.DamageDealer.AttackAria.offset.x * Constants.Flip, Player.DamageDealer.AttackAria.offset.y);
             }
 
             Player.Animator.SetFloat(PlayerAnimations.AnimatorParameterSpeed, Mathf.Abs(HorizontalMove));
@@ -64,5 +58,14 @@ namespace Assets.Scripts.PlayerState
         }
 
         public virtual void TriggerEnter(Collider2D collider) { }
+
+        public bool OnGrounded()
+        {
+            RaycastHit2D hit = Physics2D.BoxCast(Player.PlayerCollider.bounds.center,
+                Player.PlayerCollider.bounds.extents, 0f, Vector2.down,
+                Player.PlayerCollider.bounds.extents.y);
+
+            return (hit.collider != null) ? true : false;
+        }
     }
 }

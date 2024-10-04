@@ -9083,6 +9083,7 @@ GameObject:
   - component: {fileID: 817464396}
   - component: {fileID: 817464397}
   - component: {fileID: 817464398}
+  - component: {fileID: 817464399}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -9253,9 +9254,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf5a7db35ea7df54c87430e560c9f106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 50
-  _maxHealth: 50
-  _attackAria: {fileID: 653046944}
 --- !u!114 &817464394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9295,6 +9293,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 10
   _attackDistance: 5
+  _attackAria: {fileID: 653046944}
 --- !u!114 &817464397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9322,6 +9321,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxSpeed: 5
+--- !u!114 &817464399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817464384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdcc9fe1b10758f4ea75ce432e472659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 50
+  _health: 50
 --- !u!1001 &873331842
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -191,6 +191,7 @@ GameObject:
   - component: {fileID: 8741001144028564128}
   - component: {fileID: 5056592052638213263}
   - component: {fileID: 60537715701120506}
+  - component: {fileID: 2938059836457952974}
   m_Layer: 8
   m_Name: BodyZombie
   m_TagString: Untagged
@@ -362,8 +363,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14ce585c5382a4c4590a2ecb8b2fb594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 50
-  _maxHealth: 50
   _patrolRoute: {fileID: 3450529564024896681}
   _eyePosition: {fileID: 387950591368739060}
   _attackAria: {fileID: 5448512910638283551}
@@ -413,6 +412,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 10
   _attackDistance: 2
+  _attackAria: {fileID: 5448512910638283551}
+--- !u!114 &2938059836457952974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6242896850127527317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdcc9fe1b10758f4ea75ce432e472659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 100
+  _health: 100
 --- !u!1 &7500162033120617816
 GameObject:
   m_ObjectHideFlags: 0

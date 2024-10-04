@@ -18,7 +18,7 @@ public abstract class State
     {
         Enemy = enemy;
         RadiusFOV = radiusFOV;
-        Enemy.Move.SetMoveDirection(Enemy.Renderer.flipX ? Constants.RightMoveDirection : Constants.LeftMoveDirection);
+        Enemy.Move.SetMoveDirection(Enemy.Renderer.flipX ? Constants.LeftMoveDirection : Constants.RightMoveDirection);
     }
 
     public virtual void Enter() 
@@ -31,18 +31,19 @@ public abstract class State
     public virtual void Update() 
     {
         DrawRaycast();
+        Debug.DrawRay(Enemy.transform.position, Enemy.Move.MoveDirection.normalized, Color.black);
 
-        if (Enemy.transform.localPosition.x <= LastPosition.x && Enemy.Move.MoveDirection == Constants.LeftMoveDirection)
+        if (Enemy.transform.localPosition.x <= LastPosition.x && Enemy.Move.MoveDirection == Constants.RightMoveDirection)
         {
             Enemy.Renderer.flipX = true;
-            Enemy.Move.SetMoveDirection(Constants.RightMoveDirection);
-            Enemy.AttackAria.offset = new Vector2(Enemy.AttackAria.offset.x * Constants.Flip, Enemy.AttackAria.offset.y);
+            Enemy.Move.SetMoveDirection(Constants.LeftMoveDirection);
+            Enemy.DamageDealer.AttackAria.offset = new Vector2(Enemy.DamageDealer.AttackAria.offset.x * Constants.Flip, Enemy.DamageDealer.AttackAria.offset.y);
         }
-        else if (Enemy.transform.localPosition.x > LastPosition.x && Enemy.Move.MoveDirection == Constants.RightMoveDirection)
+        else if (Enemy.transform.localPosition.x > LastPosition.x && Enemy.Move.MoveDirection == Constants.LeftMoveDirection)
         {
             Enemy.Renderer.flipX = false;
-            Enemy.Move.SetMoveDirection(Constants.LeftMoveDirection);
-            Enemy.AttackAria.offset = new Vector2(Enemy.AttackAria.offset.x * Constants.Flip, Enemy.AttackAria.offset.y);
+            Enemy.Move.SetMoveDirection(Constants.RightMoveDirection);
+            Enemy.DamageDealer.AttackAria.offset = new Vector2(Enemy.DamageDealer.AttackAria.offset.x * Constants.Flip, Enemy.DamageDealer.AttackAria.offset.y);
         }
 
         LastPosition = Enemy.transform.localPosition;
