@@ -1,11 +1,13 @@
 using Assets.Scripts.PlayerState;
 using Assets.Scripts.Service;
+using Assets.Scripts.Service.Dead;
 using Assets.Scripts.Service.Unit;
 using UnityEngine;
 
 [RequireComponent(typeof(ITypeDamage), typeof(Animator), typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D), typeof(IUserInput), typeof(IDamageDealer))]
 [RequireComponent(typeof(IJump), typeof(IMoveUnit), typeof(IHealth))]
+[RequireComponent(typeof(IDead))]
 public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
 {
     public IDamageDealer DamageDealer { get; private set; }
@@ -13,6 +15,7 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
     public IJump Jump { get; private set; }
     public IMoveUnit Move { get; private set; }
     public IHealth Health { get; private set; }
+    public IDead Dead { get; private set; }
     public SpriteRenderer Renderer { get; private set; }
     public Animator Animator { get; private set; }
     public Rigidbody2D Rigidbody { get; private set; }
@@ -26,10 +29,18 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
         DamageDealer = GetComponent<IDamageDealer>();
         Move = GetComponent<IMoveUnit>();
         Health = GetComponent<IHealth>();
+        Dead = GetComponent<IDead>();
         Renderer = GetComponent<SpriteRenderer>();
         Animator = GetComponent<Animator>();
         Rigidbody = GetComponent<Rigidbody2D>();
         PlayerCollider = GetComponent<CapsuleCollider2D>();
+
+        Health.isDead += Dead.SetDead;
+    }
+
+    private void OnDestroy()
+    {
+        Health.isDead -= Dead.SetDead;
     }
 
     private void Start()
@@ -77,8 +88,11 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
     }
 
     public void UndetectedByEnemy()
-    {
-        GetComponent<SpriteRenderer>().color = Color.white;
+    {   
+        if(this != null)
+        {
+            GetComponent<SpriteRenderer>().color = Color.white;
+        }
     }
 
     public Vector2 GetPosition()

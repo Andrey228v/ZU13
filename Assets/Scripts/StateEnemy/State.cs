@@ -31,6 +31,7 @@ public abstract class State
     public virtual void Update() 
     {
         DrawRaycast();
+
         Debug.DrawRay(Enemy.transform.position, Enemy.Move.MoveDirection.normalized, Color.black);
 
         if (Enemy.transform.localPosition.x <= LastPosition.x && Enemy.Move.MoveDirection == Constants.RightMoveDirection)

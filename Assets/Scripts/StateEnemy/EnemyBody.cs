@@ -16,6 +16,7 @@ public class EnemyBody : MonoBehaviour, IDamagable, IUnit
     [SerializeField] private float _radiusFOVAttack;
 
     private string _currentStateText;
+    private bool _isTargetInFOV;
 
     public IDamageDealer DamageDealer { get; private set; }
     public IMoveUnit Move { get; private set; }
@@ -28,7 +29,6 @@ public class EnemyBody : MonoBehaviour, IDamagable, IUnit
     public Transform EyePosition { get; private set; }
     public Rigidbody2D Rigidbody {get; private set;}
     public LayerMask TargetLayer { get; private set; }
-    public bool IsTargetInFOV { get; private set; }
 
     private void Awake()
     {
@@ -45,7 +45,7 @@ public class EnemyBody : MonoBehaviour, IDamagable, IUnit
         PatrolRoute = _patrolRoute;
         EyePosition = _eyePosition;
         TargetLayer = _targetLayer;
-        IsTargetInFOV = false;
+        _isTargetInFOV = false;
         StateMachine = new StateMachine(this, _radiusFOVPatrolling, _radiusFOVPersecution, _radiusFOVAttack);
 
         EnemyStateType startState = EnemyStateType.Patrolling;
@@ -75,17 +75,34 @@ public class EnemyBody : MonoBehaviour, IDamagable, IUnit
 
     private void OnDestroy()
     {
-        IsTargetInFOV = false;
-        Target.UndetectedByEnemy();
+        _isTargetInFOV = false;
+        Target?.UndetectedByEnemy();
     }
 
     public void SetTargetInFOV(bool found)
     {
-        IsTargetInFOV = found;
+        _isTargetInFOV = found;
     }
 
     public void SetTargetPlayer(ITarget target)
     {
         Target = target;
+    }
+
+    public bool GetIsTargetInFOV()
+    {
+        if (Target == null)
+        {
+            _isTargetInFOV = false;
+        }
+        else
+        {
+            if (Target.Dead.IsDead == true)
+            {
+                _isTargetInFOV = false;
+            }
+        }
+
+        return _isTargetInFOV;
     }
 }

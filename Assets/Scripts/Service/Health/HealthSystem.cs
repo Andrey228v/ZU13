@@ -9,6 +9,7 @@ namespace Assets.Scripts.Service.Health
         [SerializeField] private int _health;
 
         public event Action isDead;
+        public event Action isHealed;
 
         public int MaxHealth { get; private set; }
 

@@ -41,21 +41,7 @@ namespace Assets.Scripts.PlayerState
 
             if (_isAttack == false)
             {
-                //Player.DamageDealer.SetDamageDirection(-Player.Move.MoveDirection);
-
-                //if (collider.TryGetComponent(out IHealth targetHealth))
-                //{
-                //    targetHealth.GetDamage(Player.DamageDealer.Damage);
-                //    _isAttack = true;
-                //}
-
-                //if(collider.TryGetComponent(out IDamagable target))
-                //{
-                //    Player.DamageDealer.Attack(target);
-                //}
                 _attack.SetAttack(Player, collider);
-
-                //_isAttack = true;
             }
         }
 

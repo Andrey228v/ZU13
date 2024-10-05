@@ -29,7 +29,10 @@ public class AttackState : State
     {
         base.Update();
 
-        Enemy.Move.Action(Enemy.Target.GetPosition());
+        if (Enemy.Target.Dead.IsDead == false)
+        {
+            Enemy.Move.Action(Enemy.Target.GetPosition());
+        }
     }
 
     public override void DrawRaycast()
@@ -47,11 +50,11 @@ public class AttackState : State
                 Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
             }
         }
-        else if (Enemy.IsTargetInFOV == true)
+        else if (Enemy.GetIsTargetInFOV() == true)
         {
             Enemy.StateMachine.SelectState(EnemyStateType.Persecution);
         }
-        else if (Enemy.IsTargetInFOV == false)
+        else if (Enemy.GetIsTargetInFOV() == false)
         {
             Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
         }
@@ -63,22 +66,7 @@ public class AttackState : State
 
         if (_isAttack == false)
         {
-            //Enemy.DamageDealer.SetDamageDirection(Enemy.Move.MoveDirection);
-
-            //if (collider.TryGetComponent(out IHealth targetHealth))
-            //{
-            //    targetHealth.GetDamage(Enemy.DamageDealer.Damage);
-            //    _isAttack = true;
-            //}
-
-            //if (collider.TryGetComponent(out IDamagable target))
-            //{
-            //    Enemy.DamageDealer.Attack(target);
-            //}
-
             _attack.SetAttack(Enemy, collider);
-
-            //_isAttack = true;
         }
     }
     

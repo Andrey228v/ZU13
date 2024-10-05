@@ -13,6 +13,11 @@ public class PersecutionState : State
         base.Enter();
 
         Enemy.Animator.SetBool(EnemyAnimations.AnimatorParameterPersecution, true);
+
+        if(Enemy.Target.Dead.IsDead == true)
+        {
+            Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
+        }
     }
 
     public override void Exit()
@@ -34,7 +39,7 @@ public class PersecutionState : State
 
         if (IsHited) 
         {
-            if (Hit.collider != null && Enemy.IsTargetInFOV == true)
+            if (Hit.collider != null && Enemy.GetIsTargetInFOV() == true)
             {
                 if (IsPlayerFound == false)
                 {
@@ -48,21 +53,25 @@ public class PersecutionState : State
                 }
             }
 
-            else if (Hit.collider != null && Enemy.IsTargetInFOV == false)
+            else if (Hit.collider != null && Enemy.GetIsTargetInFOV() == false)
             {
                 Enemy.Target.UndetectedByEnemy();
                 Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
             }
         }
-        else if (Enemy.IsTargetInFOV == true)
+        else if (Enemy.GetIsTargetInFOV() == true)
         {
             Enemy.Target.UndetectedByEnemy();
             Enemy.SetTargetInFOV(false);
             Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
         }
-        else if( Enemy.IsTargetInFOV == false)
+        else if( Enemy.GetIsTargetInFOV() == false)
         {
             Enemy.Target.UndetectedByEnemy();
+            Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
+        }
+        else
+        {
             Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
         }
     }
