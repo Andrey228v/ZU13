@@ -5,6 +5,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Animator), typeof(SpriteRenderer), typeof(Rigidbody2D))]
 [RequireComponent(typeof(IMoveUnit), typeof(IDamageDealer), typeof(IHealth))]
+[RequireComponent (typeof(IDead))]
 public class EnemyBody : MonoBehaviour, IDamagable, IUnit
 {
     [SerializeField] private Transform _patrolRoute;
@@ -22,6 +23,7 @@ public class EnemyBody : MonoBehaviour, IDamagable, IUnit
     public IMoveUnit Move { get; private set; }
     public ITarget Target { get; private set; }
     public IHealth Health { get; private set; }
+    public IDead Dead { get; private set; }
     public SpriteRenderer Renderer { get; private set; }
     public Animator Animator { get; private set; }
     public Transform PatrolRoute { get; private set; }
@@ -35,9 +37,12 @@ public class EnemyBody : MonoBehaviour, IDamagable, IUnit
         Move = GetComponent<IMoveUnit>();
         DamageDealer = GetComponent<IDamageDealer>();
         Health = GetComponent<IHealth>();
+        Dead = GetComponent<IDead>();
         Renderer = GetComponent<SpriteRenderer>();
         Animator = GetComponent<Animator>();
         Rigidbody = GetComponent<Rigidbody2D>();
+
+        Health.Died += Dead.SetDead;
     }
 
     private void Start()
@@ -77,6 +82,7 @@ public class EnemyBody : MonoBehaviour, IDamagable, IUnit
     {
         _isTargetInFOV = false;
         Target?.UndetectedByEnemy();
+        Health.Died -= Dead.SetDead;
     }
 
     public void SetTargetInFOV(bool found)

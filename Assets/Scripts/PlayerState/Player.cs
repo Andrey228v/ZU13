@@ -35,12 +35,12 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
         Rigidbody = GetComponent<Rigidbody2D>();
         PlayerCollider = GetComponent<CapsuleCollider2D>();
 
-        Health.isDead += Dead.SetDead;
+        Health.Died += Dead.SetDead;
     }
 
     private void OnDestroy()
     {
-        Health.isDead -= Dead.SetDead;
+       Health.Died -= Dead.SetDead;
     }
 
     private void Start()
@@ -65,7 +65,7 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
         {
             if (collision.gameObject.TryGetComponent(out HealKit healKit))
             {
-                if (Health.TryGetHealth(healKit.HealthPoints))
+                if (Health.TryTakeHealing(healKit.HealthPoints))
                 {
                     healKit.TakeObject();
                 }

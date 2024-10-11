@@ -11,7 +11,7 @@ namespace Assets.Scripts.Service
 
             if (collider.TryGetComponent(out IHealth targetHealth))
             {
-                targetHealth.GetDamage(unit.DamageDealer.Damage);
+               targetHealth.TakeDamage(unit.DamageDealer.Damage);
             }
 
             if (collider.TryGetComponent(out IDamagable target))
