@@ -65,7 +65,7 @@ public class EnemyBody : MonoBehaviour, IDamagable, IUnit
 
     private void OnDrawGizmos()
     {
-        StateMachine.CurrentState.DrawGizmos();
+        StateMachine?.CurrentState.DrawGizmos();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
