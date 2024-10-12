@@ -66,7 +66,7 @@ public class PatrollingState : State
 
         if (IsHited)
         {
-            if (Hit.collider != null && Enemy.IsTargetInFOV == false)
+            if (Hit.collider != null && Enemy.GetIsTargetInFOV() == false)
             {
                 if (IsPlayerFound)
                 {
@@ -78,7 +78,7 @@ public class PatrollingState : State
                 }
             }
         }
-        else if (Enemy.IsTargetInFOV == true)
+        else if (Enemy.GetIsTargetInFOV() == true)
         {
             Enemy.Target.UndetectedByEnemy();
             Enemy.SetTargetInFOV(false);

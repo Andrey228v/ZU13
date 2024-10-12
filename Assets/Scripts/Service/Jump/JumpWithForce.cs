@@ -25,7 +25,7 @@ namespace Assets.Scripts.Service.Jump
         
         public void Action(Vector2 direction)
         {
-            Rigidbody.AddForce(new Vector2(_forceX * -direction.x, _forceY), ForceMode2D.Impulse);
+            Rigidbody.AddForce(new Vector2(_forceX * direction.x, _forceY), ForceMode2D.Impulse);
         }
     }
 }

@@ -6,14 +6,17 @@ namespace Assets.Scripts.Service.DamageDealer
     {
         [SerializeField] private int _damage;
         [SerializeField] private int _attackDistance;
+        [SerializeField] private BoxCollider2D _attackAria;
 
         public int Damage {get; private set;}
         public float AttackDistance { get; private set; }
         public Vector2 DamageDirection { get; private set; }
         public ITypeDamage TypeDamage { get; private set; }
+        public BoxCollider2D AttackAria { get; private set; }
 
         private void Awake()
         {
+            AttackAria = _attackAria;
             Damage = _damage;
             AttackDistance = _attackDistance;
 
@@ -26,7 +29,7 @@ namespace Assets.Scripts.Service.DamageDealer
             AttackDistance = _attackDistance;
         }
 
-        public void Attack(IDamageTaker damageTaker)
+        public void Attack(IDamagable damageTaker)
         {
             TypeDamage.HitDamageType(this, damageTaker);
         }

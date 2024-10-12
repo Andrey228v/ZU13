@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class AttackState : State
 {
+    private bool _isAttack = false;
+    private Attack _attack = new Attack();
+
     public AttackState(EnemyBody enemy, float radiusFOV) : base(enemy, radiusFOV) 
     {
         RadiusFOV = radiusFOV;
@@ -13,6 +16,7 @@ public class AttackState : State
         base.Enter();
 
         Enemy.Animator.SetBool(EnemyAnimations.AnimatorParameterAttack, true);
+        _isAttack = false;
     }
 
     public override void Exit()
@@ -25,7 +29,10 @@ public class AttackState : State
     {
         base.Update();
 
-        Enemy.Move.Action(Enemy.Target.GetPosition());
+        if (Enemy.Target.Dead.IsDead == false)
+        {
+            Enemy.Move.Action(Enemy.Target.GetPosition());
+        }
     }
 
     public override void DrawRaycast()
@@ -43,11 +50,11 @@ public class AttackState : State
                 Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
             }
         }
-        else if (Enemy.IsTargetInFOV == true)
+        else if (Enemy.GetIsTargetInFOV() == true)
         {
             Enemy.StateMachine.SelectState(EnemyStateType.Persecution);
         }
-        else if (Enemy.IsTargetInFOV == false)
+        else if (Enemy.GetIsTargetInFOV() == false)
         {
             Enemy.StateMachine.SelectState(EnemyStateType.Patrolling);
         }
@@ -57,15 +64,9 @@ public class AttackState : State
     {
         base.TriggerEnter(collider);
 
-        if (collider.TryGetComponent(out IMoveUnit body))
+        if (_isAttack == false)
         {
-            Enemy.DamageDealer.SetDamageDirection(Enemy.Move.MoveDirection);
-
-            if (collider.TryGetComponent(out IDamageTaker target))
-            {
-                Enemy.DamageDealer.Attack(target);
-                target.GetDamage(Enemy.DamageDealer);
-            }
+            _attack.SetAttack(Enemy, collider);
         }
     }
     
