@@ -74,7 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8599212018043428014}
   - component: {fileID: 5448512910638283551}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: AttackAria
   m_TagString: Untagged
   m_Icon: {fileID: 0}

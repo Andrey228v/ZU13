@@ -44,6 +44,7 @@ namespace Assets.Scripts.StateEnemy
                 case EnemyStateType.Attack:
                     ChangeState(AttackState);
                     break;
+
                 default:
                     Console.WriteLine("Такого состояния нет");
                     break;
