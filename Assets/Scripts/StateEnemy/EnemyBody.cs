@@ -1,10 +1,11 @@
 using Assets.Scripts.Service;
+using Assets.Scripts.Service.Health;
 using Assets.Scripts.Service.Unit;
 using Assets.Scripts.StateEnemy;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator), typeof(SpriteRenderer), typeof(Rigidbody2D))]
-[RequireComponent(typeof(IMoveUnit), typeof(IDamageDealer), typeof(IHealth))]
+[RequireComponent(typeof(IMoveUnit), typeof(IDamageDealer), typeof(HealthUnits))]
 [RequireComponent (typeof(IDead))]
 public class EnemyBody : MonoBehaviour, IDamagable, IUnit
 {
@@ -22,7 +23,7 @@ public class EnemyBody : MonoBehaviour, IDamagable, IUnit
     public IDamageDealer DamageDealer { get; private set; }
     public IMoveUnit Move { get; private set; }
     public ITarget Target { get; private set; }
-    public IHealth Health { get; private set; }
+    public HealthUnits Health { get; private set; }
     public IDead Dead { get; private set; }
     public SpriteRenderer Renderer { get; private set; }
     public Animator Animator { get; private set; }
@@ -36,7 +37,7 @@ public class EnemyBody : MonoBehaviour, IDamagable, IUnit
     {
         Move = GetComponent<IMoveUnit>();
         DamageDealer = GetComponent<IDamageDealer>();
-        Health = GetComponent<IHealth>();
+        Health = GetComponent<HealthUnits>();
         Dead = GetComponent<IDead>();
         Renderer = GetComponent<SpriteRenderer>();
         Animator = GetComponent<Animator>();

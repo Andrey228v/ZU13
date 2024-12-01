@@ -1,22 +1,20 @@
 ﻿using UnityEngine.UI;
-using Assets.Scripts.Service;
+
 using UnityEngine;
+using Assets.Scripts.Service.Health;
 
 namespace Assets.Scripts.UnitUI
 {
-    [RequireComponent(typeof(IHealth))]
+    [RequireComponent(typeof(HealthUnits))]
     public class SliderUI: MonoBehaviour
     {
-        [SerializeField] private Slider _slider;
+        [field:SerializeField] public Slider Slider { get; private set; }
 
-        public IHealth Health {get; private set;}
-
-        public Slider Slider { get; private set; }
+        public HealthUnits Health {get; private set;}
 
         public virtual void Awake()
         {
-            Health = GetComponent<IHealth>();
-            Slider = _slider;
+            Health = GetComponent<HealthUnits>();
 
             Health.Damaged += ChangeData;
             Health.Healed += ChangeData;
