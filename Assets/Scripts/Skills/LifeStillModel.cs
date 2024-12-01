@@ -25,15 +25,34 @@ namespace Assets.Scripts.Skills
 
         public int Range {  get; private set; }
 
-        public void SetPlayer(Player player) => Player = player;
-        public void SetLineRenderer(LineRenderer lineRenderer) => LineRenderer = lineRenderer; 
-        public void SetUI(TMP_Text ui) => UI = ui; 
-        public void SetTarget(EnemyBody target) => Target = target; 
-        public void SetTargetLayer(int targetLayer) => TargetLayer = targetLayer; 
-        public void SetUseTime(int useTime) => UseTime = useTime; 
-        public void SetCooldown(int cooldown) => Cooldown = cooldown; 
-        public void SetDamage(int damage) => Damage = damage; 
-        public void SetHeal(int heal) => Heal = heal; 
-        public void SetRange(int range) => Range = range; 
+        public void SetPlayer(Player player) => 
+            Player = player;
+
+        public void SetLineRenderer(LineRenderer lineRenderer) => 
+            LineRenderer = lineRenderer; 
+
+        public void SetUI(TMP_Text ui) => 
+            UI = ui; 
+
+        public void SetTarget(EnemyBody target) => 
+            Target = target; 
+
+        public void SetTargetLayer(int targetLayer) => 
+            TargetLayer = targetLayer; 
+
+        public void SetUseTime(int useTime) => 
+            UseTime = useTime; 
+
+        public void SetCooldown(int cooldown) => 
+            Cooldown = cooldown; 
+
+        public void SetDamage(int damage) => 
+            Damage = damage; 
+
+        public void SetHeal(int heal) => 
+            Heal = heal; 
+
+        public void SetRange(int range) => 
+            Range = range; 
     }
 }
