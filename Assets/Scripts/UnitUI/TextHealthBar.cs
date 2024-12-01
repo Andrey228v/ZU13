@@ -1,18 +1,18 @@
-using Assets.Scripts.Service;
+using Assets.Scripts.Service.Health;
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(IHealth))]
+[RequireComponent(typeof(HealthUnits))]
 public class TextHealthBar : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _healthText;
 
-    private IHealth _health;
+    private HealthUnits _health;
     private string _textHP;
 
     private void Awake()
     {
-        _health = GetComponent<IHealth>();
+        _health = GetComponent<HealthUnits>();
 
         _health.Damaged += ChangeData;
         _health.Healed += ChangeData;

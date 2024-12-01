@@ -3,5 +3,7 @@
     public interface ITakerObject
     {
         public void TakeObject();
+
+        
     }
 }

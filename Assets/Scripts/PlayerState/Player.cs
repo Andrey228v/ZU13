@@ -1,13 +1,13 @@
 using Assets.Scripts.PlayerState;
 using Assets.Scripts.Service;
-using Assets.Scripts.Service.Dead;
+using Assets.Scripts.Service.Health;
 using Assets.Scripts.Service.Unit;
 using Assets.Scripts.Skills;
 using UnityEngine;
 
 [RequireComponent(typeof(ITypeDamage), typeof(Animator), typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D), typeof(IUserInput), typeof(IDamageDealer))]
-[RequireComponent(typeof(IJump), typeof(IMoveUnit), typeof(IHealth))]
+[RequireComponent(typeof(IJump), typeof(IMoveUnit), typeof(HealthUnits))]
 [RequireComponent(typeof(IDead), typeof(ISkillView))]
 public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
 {
@@ -15,7 +15,7 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
     public IUserInput UserInput { get; private set; }
     public IJump Jump { get; private set; }
     public IMoveUnit Move { get; private set; }
-    public IHealth Health { get; private set; }
+    public HealthUnits Health { get; private set; }
     public IDead Dead { get; private set; }
     public ISkillView Skill { get; private set; }
     public SpriteRenderer Renderer { get; private set; }
@@ -30,7 +30,7 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
         Jump = GetComponent<IJump>();
         DamageDealer = GetComponent<IDamageDealer>();
         Move = GetComponent<IMoveUnit>();
-        Health = GetComponent<IHealth>();
+        Health = GetComponent<HealthUnits>();
         Dead = GetComponent<IDead>();
         Skill = GetComponent<ISkillView>();
         Renderer = GetComponent<SpriteRenderer>();
@@ -66,16 +66,19 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
     {
         if (collision.gameObject.TryGetComponent(out ITakerObject item))
         {
-            if (collision.gameObject.TryGetComponent(out HealKit healKit))
+            if (item is HealKit)
             {
+                HealKit healKit = collision.gameObject.GetComponent<HealKit>();
+
                 if (Health.TryTakeHealing(healKit.HealthPoints))
                 {
-                    healKit.TakeObject();
+                    item.TakeObject();
                 }
             }
-            else if(collision.gameObject.TryGetComponent(out Coin coin))
+
+            if (item is Coin)
             {
-                coin.TakeObject();
+                item.TakeObject();
             }
         }
     }
@@ -87,14 +90,14 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
 
     public void DetectedByEnemy()
     {
-        GetComponent<SpriteRenderer>().color = Color.red;
+        Renderer.color = Color.red;
     }
 
     public void UndetectedByEnemy()
     {   
         if(this != null)
         {
-            GetComponent<SpriteRenderer>().color = Color.white;
+            Renderer.color = Color.white;
         }
     }
 

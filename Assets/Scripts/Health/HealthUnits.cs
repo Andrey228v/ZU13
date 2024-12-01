@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Service.Health
 {
-    public class Health : MonoBehaviour, IHealth
+    public class HealthUnits : MonoBehaviour
     {
         [SerializeField] private int _maxAmount;
         [SerializeField] private int _amount;

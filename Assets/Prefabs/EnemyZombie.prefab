@@ -191,9 +191,9 @@ GameObject:
   - component: {fileID: 8741001144028564128}
   - component: {fileID: 5056592052638213263}
   - component: {fileID: 60537715701120506}
-  - component: {fileID: 4292241599332255575}
   - component: {fileID: 8121324097090998410}
   - component: {fileID: 8564749850092729384}
+  - component: {fileID: 1830847887185653998}
   m_Layer: 8
   m_Name: BodyZombie
   m_TagString: Untagged
@@ -416,20 +416,6 @@ MonoBehaviour:
   _damage: 10
   _attackDistance: 2
   _attackAria: {fileID: 5448512910638283551}
---- !u!114 &4292241599332255575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6242896850127527317}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 230acc53e7499f84c8c94a7133915217, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxAmount: 40
-  _amount: 40
 --- !u!114 &8121324097090998410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,6 +441,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 620763298438552519}
+--- !u!114 &1830847887185653998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6242896850127527317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a824360b7935f5498b9503e3eb17b49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxAmount: 100
+  _amount: 100
 --- !u!1 &7500162033120617816
 GameObject:
   m_ObjectHideFlags: 0
