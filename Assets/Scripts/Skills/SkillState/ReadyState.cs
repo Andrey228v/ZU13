@@ -19,7 +19,7 @@ namespace Assets.Scripts.Skills.SkillState
 
             if (_model.Player.UserInput.RightMouseButton && TryFindTarget())
             {
-                _model.Player.Skill.StateMachineSkill.SelectState(SkillStateType.Using);
+                _model.Player.Skill.SelectState(SkillStateType.Using);
             }
         }
 
@@ -28,21 +28,6 @@ namespace Assets.Scripts.Skills.SkillState
             base.DrawGizmos();
 
             Gizmos.DrawWireSphere(_model.Player.transform.position, _model.Range);
-        }
-
-        private bool TryFindTarget()
-        {
-            bool isFind = false;
-
-            Collider2D collider = Physics2D.OverlapCircle(_model.Player.transform.position, _model.Range, _model.TargetLayer);
-
-            if (collider != null)
-            {
-                isFind = true;
-                _model.SetTarget(collider.gameObject.GetComponent<EnemyBody>());
-            }
-
-            return isFind;
         }
     }
 }

@@ -4,6 +4,6 @@ namespace Assets.Scripts.Skills
 {
     public interface ISkillView
     {
-        public StateMachineSkill StateMachineSkill { get; }
+        public void SelectState(SkillStateType stateType);
     }
 }

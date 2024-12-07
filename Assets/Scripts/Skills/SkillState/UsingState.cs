@@ -14,7 +14,7 @@ namespace Assets.Scripts.Skills.SkillState
         public override void Enter()
         {
             base.Enter();
-            _model.UI.text = "UsingState";
+            _model.UI.text = $"UsingState: {_time}";
         }
 
         public override void Exit()
@@ -27,26 +27,44 @@ namespace Assets.Scripts.Skills.SkillState
         {
             base.Update();
 
-            if (_time <= _model.UseTime && _model.Target.Dead.IsDead == false)
+            if (_time <= _model.UseTime)
             {
                 _time += Time.deltaTime;
-                _model.LineRenderer.SetPosition(0, new Vector3(_model.Player.transform.position.x, _model.Player.transform.position.y, _backGorundCoordZ));
-                _model.LineRenderer.SetPosition(1, new Vector3(_model.Target.transform.position.x, _model.Target.transform.position.y, _backGorundCoordZ));
 
-                if (_time >= _second)
+                if (TryFindTarget())
                 {
-                    _model.Target.Health.TakeDamage(_model.Damage);
-                    _model.Player.Health.TryTakeHealing(_model.Heal);
-                    _second++;
+                    _model.LineRenderer.SetPosition(0, new Vector3(_model.Player.transform.position.x, _model.Player.transform.position.y, _backGorundCoordZ));
+                    _model.LineRenderer.SetPosition(1, new Vector3(_model.Target.transform.position.x, _model.Target.transform.position.y, _backGorundCoordZ));
+
+                    if (_time >= _second)
+                    {
+                        int damageTake = _model.Target.Health.TakeDamage(_model.Damage);
+                        _model.Player.Health.TryTakeHealing(damageTake);
+                        _second++;
+                    }
                 }
+                else
+                {
+                    _model.LineRenderer.SetPosition(0, Vector3.zero);
+                    _model.LineRenderer.SetPosition(1, Vector3.zero);
+                }
+               
+                _model.UI.text = $"UsingState: {_model.UseTime - _time}";
             }
             else 
             {
                 _model.LineRenderer.SetPosition(0, Vector3.zero);
                 _model.LineRenderer.SetPosition(1, Vector3.zero);
-                _model.Player.Skill.StateMachineSkill.SelectState(SkillStateType.Cooldown);
+                _model.Player.Skill.SelectState(SkillStateType.Cooldown);
                 _second = 1;
             }
+        }
+
+        public override void DrawGizmos()
+        {
+            base.DrawGizmos();
+
+            Gizmos.DrawWireSphere(_model.Player.transform.position, _model.Range);
         }
     }
 }

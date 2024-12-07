@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Skills.SkillState;
+using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,13 +14,18 @@ namespace Assets.Scripts.Skills
         [SerializeField] private int _useTime;
         [SerializeField] private int _cooldown;
         [SerializeField] private int _damage;
-        [SerializeField] private int _heal;
         [SerializeField] private int _range;
 
         private LineRenderer _lineRenderer;
 
         public StateMachineSkill StateMachineSkill { get; private set; }
-        
+
+        public ReadyState ReadyState { get; private set; }
+
+        public UsingState UsingState { get; private set; }
+
+        public CooldownState CooldownState { get; private set; }
+
         private void Awake()
         {
             _lineRenderer = _player.AddComponent<LineRenderer>();
@@ -35,12 +41,14 @@ namespace Assets.Scripts.Skills
             lifeStillModel.SetUseTime(_useTime);
             lifeStillModel.SetCooldown(_cooldown);
             lifeStillModel.SetDamage(_damage);
-            lifeStillModel.SetHeal(_heal);
             lifeStillModel.SetRange(_range);
 
             StateMachineSkill = new StateMachineSkill(lifeStillModel);
-            SkillStateType startState = SkillStateType.Ready;
-            StateMachineSkill.Initialize(startState);
+            ReadyState = new ReadyState(lifeStillModel);
+            UsingState = new UsingState(lifeStillModel);
+            CooldownState = new CooldownState(lifeStillModel);
+
+            StateMachineSkill.Initialize(ReadyState);
         }
 
         private void Update()
@@ -51,6 +59,28 @@ namespace Assets.Scripts.Skills
         private void OnDrawGizmos()
         {
             StateMachineSkill.CurrentState.DrawGizmos();
+        }
+
+        public void SelectState(SkillStateType stateType)
+        {
+            switch (stateType)
+            {
+                case SkillStateType.Ready:
+                    StateMachineSkill.ChangeState(ReadyState);
+                    break;
+
+                case SkillStateType.Using:
+                    StateMachineSkill.ChangeState(UsingState);
+                    break;
+
+                case SkillStateType.Cooldown:
+                    StateMachineSkill.ChangeState(CooldownState);
+                    break;
+
+                default:
+                    Console.WriteLine("Такого состояния нет");
+                    break;
+            }
         }
     }
 }
