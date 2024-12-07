@@ -7,14 +7,12 @@ namespace Assets.Scripts.Skills.SkillState
         private float _time = 0;
 
         public CooldownState(LifeStillModel model) : base(model)
-        {
-        }
+        {}
 
         public override void Enter()
         {
             base.Enter();
-            _model.UI.text = "CooldownState";
-
+            _model.UI.text = $"CooldownState {_model.Cooldown}";
         }
 
         public override void Exit()
@@ -30,10 +28,11 @@ namespace Assets.Scripts.Skills.SkillState
             if (_time < _model.Cooldown)
             {
                 _time += Time.deltaTime;
+                _model.UI.text = $"CooldownState {_model.Cooldown - _time}";
             }
             else
             {
-                _model.Player.Skill.StateMachineSkill.SelectState(SkillStateType.Ready);
+                _model.Player.Skill.SelectState(SkillStateType.Ready);
             }
         }
     }

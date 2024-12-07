@@ -27,8 +27,11 @@ namespace Assets.Scripts.Service.Health
             Healed?.Invoke();
         }
 
-        public void TakeDamage(int damage)
+        public int TakeDamage(int damage)
         {
+            int pastAmount = _amount;
+            int damageTake = 0;
+
             _amount -= damage;
 
             if (_amount < 0)
@@ -41,8 +44,11 @@ namespace Assets.Scripts.Service.Health
                 Died?.Invoke();
             }
 
+            damageTake = pastAmount - _amount;
             Amount = _amount;
             Damaged?.Invoke();
+
+            return damageTake;
         }
 
         public bool TryTakeHealing(int points)
