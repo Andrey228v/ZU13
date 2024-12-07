@@ -45,16 +45,14 @@ namespace Assets.Scripts.Skills.SkillState
                 }
                 else
                 {
-                    _model.LineRenderer.SetPosition(0, Vector3.zero);
-                    _model.LineRenderer.SetPosition(1, Vector3.zero);
+                    DeletLine();
                 }
                
                 _model.UI.text = $"UsingState: {_model.UseTime - _time}";
             }
             else 
             {
-                _model.LineRenderer.SetPosition(0, Vector3.zero);
-                _model.LineRenderer.SetPosition(1, Vector3.zero);
+                 DeletLine();
                 _model.Player.Skill.SelectState(SkillStateType.Cooldown);
                 _second = 1;
             }
@@ -65,6 +63,12 @@ namespace Assets.Scripts.Skills.SkillState
             base.DrawGizmos();
 
             Gizmos.DrawWireSphere(_model.Player.transform.position, _model.Range);
+        }
+
+        private void DeletLine()
+        {
+            _model.LineRenderer.SetPosition(0, Vector3.zero);
+            _model.LineRenderer.SetPosition(1, Vector3.zero);
         }
     }
 }
