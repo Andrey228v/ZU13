@@ -1,3 +1,5 @@
+using Assets.Scripts.Service;
+using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -18,7 +20,7 @@ public class CameraMovement : MonoBehaviour
         {
             float x = _unit.transform.position.x;
             float y = _unit.transform.position.y;
-            float z = -10;
+            float z = Constants.ZPosition;
 
             transform.position = new Vector3(x, y, z);
         }

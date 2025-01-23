@@ -9,7 +9,7 @@ namespace Assets.Scripts.Skills
 
         public LineRenderer LineRenderer { get; private set; }
 
-        public TMP_Text UI {get; private set;}
+        //public TMP_Text UI {get; private set;}
 
         public EnemyBody Target {get; private set;}
 
@@ -31,8 +31,8 @@ namespace Assets.Scripts.Skills
         public void SetLineRenderer(LineRenderer lineRenderer) => 
             LineRenderer = lineRenderer; 
 
-        public void SetUI(TMP_Text ui) => 
-            UI = ui; 
+        //public void SetUI(TMP_Text ui) => 
+        //    UI = ui; 
 
         public void SetTarget(EnemyBody target) => 
             Target = target; 

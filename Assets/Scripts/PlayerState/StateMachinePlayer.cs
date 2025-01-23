@@ -7,13 +7,13 @@ namespace Assets.Scripts.PlayerState
         public StateMachinePlayer(Player player)
         {
             MovementState = new MovementState(player);
-            AttackStatePlayer = new AttackStatePlayer(player);
+            AttackStatePlayer = new AttackState(player);
         }
 
         public StatePlayer CurrentState { get; private set; }
         public StatePlayer PastState { get; private set; }
         public MovementState MovementState { get; private set; }
-        public AttackStatePlayer AttackStatePlayer { get; private set; }
+        public AttackState AttackStatePlayer { get; private set; }
 
         public void Initialize(PlayerStateType stateType)
         {

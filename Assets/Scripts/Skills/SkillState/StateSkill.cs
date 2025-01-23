@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts.Skills.SkillState
 {
     public abstract class StateSkill
     {
         protected EnemyBody Target;
-
         protected LifeStillModel _model;
         protected RaycastHit2D Hit;
 
@@ -50,6 +50,8 @@ namespace Assets.Scripts.Skills.SkillState
 
             return isFind;
         }
+
+        public abstract string TextUI();
 
         private Collider2D FindMinDistance(Collider2D[] colliders)
         {

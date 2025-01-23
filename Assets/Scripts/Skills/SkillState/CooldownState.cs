@@ -12,7 +12,8 @@ namespace Assets.Scripts.Skills.SkillState
         public override void Enter()
         {
             base.Enter();
-            _model.UI.text = $"CooldownState {_model.Cooldown}";
+            //ChangeState($"CooldownState {_model.Cooldown}");
+            //_model.UI.text = $"CooldownState {_model.Cooldown}";
         }
 
         public override void Exit()
@@ -28,12 +29,17 @@ namespace Assets.Scripts.Skills.SkillState
             if (_time < _model.Cooldown)
             {
                 _time += Time.deltaTime;
-                _model.UI.text = $"CooldownState {_model.Cooldown - _time}";
+                //_model.UI.text = $"CooldownState {_model.Cooldown - _time}";
             }
             else
             {
                 _model.Player.Skill.SelectState(SkillStateType.Ready);
             }
+        }
+
+        public override string TextUI()
+        {
+            return $"CooldownState {_model.Cooldown - _time}";
         }
     }
 }
