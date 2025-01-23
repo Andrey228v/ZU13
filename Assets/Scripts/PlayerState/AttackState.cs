@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Assets.Scripts.PlayerState
 {
-    public class AttackStatePlayer : StatePlayer
+    public class AttackState : StatePlayer
     {
         private bool _isAttack = false;
         private Attack _attack = new Attack();
 
-        public AttackStatePlayer(Player player) : base(player){}
+        public AttackState(Player player) : base(player){}
 
         public override void Enter()
         {

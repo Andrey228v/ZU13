@@ -10,11 +10,12 @@ namespace Assets.Scripts.Skills
     {
         [SerializeField] private Player _player;
         [SerializeField] private LayerMask _targetLayer;
-        [SerializeField] private TMP_Text _ui;
         [SerializeField] private int _useTime;
         [SerializeField] private int _cooldown;
         [SerializeField] private int _damage;
         [SerializeField] private int _range;
+
+        public event Action<string> ChangedState;
 
         private LineRenderer _lineRenderer;
 
@@ -36,7 +37,6 @@ namespace Assets.Scripts.Skills
             LifeStillModel lifeStillModel = new LifeStillModel();
             lifeStillModel.SetPlayer(_player);
             lifeStillModel.SetLineRenderer(_lineRenderer);
-            lifeStillModel.SetUI(_ui);
             lifeStillModel.SetTargetLayer(_targetLayer.value);
             lifeStillModel.SetUseTime(_useTime);
             lifeStillModel.SetCooldown(_cooldown);
@@ -49,6 +49,8 @@ namespace Assets.Scripts.Skills
             CooldownState = new CooldownState(lifeStillModel);
 
             StateMachineSkill.Initialize(ReadyState);
+
+            ChangeStateEvent();
         }
 
         private void Update()
@@ -61,24 +63,32 @@ namespace Assets.Scripts.Skills
             StateMachineSkill.CurrentState.DrawGizmos();
         }
 
+        public void ChangeStateEvent()
+        {
+            ChangedState?.Invoke(StateMachineSkill.CurrentState.TextUI());
+        }
+
         public void SelectState(SkillStateType stateType)
         {
             switch (stateType)
             {
                 case SkillStateType.Ready:
                     StateMachineSkill.ChangeState(ReadyState);
+                    ChangeStateEvent();
                     break;
 
                 case SkillStateType.Using:
                     StateMachineSkill.ChangeState(UsingState);
+                    ChangeStateEvent();
                     break;
 
                 case SkillStateType.Cooldown:
                     StateMachineSkill.ChangeState(CooldownState);
+                    ChangeStateEvent();
                     break;
 
                 default:
-                    Console.WriteLine("Такого состояния нет");
+                    Console.WriteLine("None State");
                     break;
             }
         }

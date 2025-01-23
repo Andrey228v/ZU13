@@ -14,7 +14,8 @@ namespace Assets.Scripts.Skills.SkillState
         public override void Enter()
         {
             base.Enter();
-            _model.UI.text = $"UsingState: {_time}";
+            //ChangeState($"UsingState: {_time}");
+            //_model.UI.text = $"UsingState: {_time}";
         }
 
         public override void Exit()
@@ -48,7 +49,7 @@ namespace Assets.Scripts.Skills.SkillState
                     DeletLine();
                 }
                
-                _model.UI.text = $"UsingState: {_model.UseTime - _time}";
+                //_model.UI.text = $"UsingState: {_model.UseTime - _time}";
             }
             else 
             {
@@ -56,6 +57,11 @@ namespace Assets.Scripts.Skills.SkillState
                 _model.Player.Skill.SelectState(SkillStateType.Cooldown);
                 _second = 1;
             }
+        }
+
+        public override string TextUI()
+        {
+            return $"UsingState: {_time}";
         }
 
         public override void DrawGizmos()

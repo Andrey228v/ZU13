@@ -2,7 +2,7 @@
 {
     public interface ITakerObject
     {
-        public void TakeObject();
+        public void TakeObject(Player player);
 
         
     }

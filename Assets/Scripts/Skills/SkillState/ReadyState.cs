@@ -5,12 +5,10 @@ namespace Assets.Scripts.Skills.SkillState
     public class ReadyState : StateSkill
     {
         public ReadyState(LifeStillModel model) : base(model) { }
-
+        
         public override void Enter()
         {
             base.Enter();
-
-            _model.UI.text = "ReadyState";
         }
 
         public override void Update()
@@ -21,6 +19,11 @@ namespace Assets.Scripts.Skills.SkillState
             {
                 _model.Player.Skill.SelectState(SkillStateType.Using);
             }
+        }
+
+        public override string TextUI()
+        {
+            return "ReadyState";
         }
 
         public override void DrawGizmos()

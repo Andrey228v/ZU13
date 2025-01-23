@@ -1,6 +1,7 @@
 using Assets.Scripts.PlayerState;
 using Assets.Scripts.Service;
 using Assets.Scripts.Service.Health;
+using Assets.Scripts.Service.Taker;
 using Assets.Scripts.Service.Unit;
 using Assets.Scripts.Skills;
 using UnityEngine;
@@ -8,7 +9,7 @@ using UnityEngine;
 [RequireComponent(typeof(ITypeDamage), typeof(Animator), typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D), typeof(IUserInput), typeof(IDamageDealer))]
 [RequireComponent(typeof(IJump), typeof(IMoveUnit), typeof(HealthUnits))]
-[RequireComponent(typeof(IDead), typeof(ISkillView))]
+[RequireComponent(typeof(IDead), typeof(ISkillView), typeof(Taker))]
 public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
 {
     public IDamageDealer DamageDealer { get; private set; }
@@ -62,26 +63,26 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
         StateMachinePlayer.CurrentState.Update();
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.TryGetComponent(out ITakerObject item))
-        {
-            if (item is HealKit)
-            {
-                HealKit healKit = collision.gameObject.GetComponent<HealKit>();
+    //public void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.TryGetComponent(out ITakerObject item))
+    //    {
+    //        if (item is HealKit)
+    //        {
+    //            HealKit healKit = collision.gameObject.GetComponent<HealKit>();
 
-                if (Health.TryTakeHealing(healKit.HealthPoints))
-                {
-                    item.TakeObject();
-                }
-            }
+    //            if (Health.TryTakeHealing(healKit.HealthPoints))
+    //            {
+    //                item.TakeObject();
+    //            }
+    //        }
 
-            if (item is Coin)
-            {
-                item.TakeObject();
-            }
-        }
-    }
+    //        if (item is Coin)
+    //        {
+    //            item.TakeObject();
+    //        }
+    //    }
+    //}
 
     private void OnTriggerStay2D(Collider2D collision)
     {
