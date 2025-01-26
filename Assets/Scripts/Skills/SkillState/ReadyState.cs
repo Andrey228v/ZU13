@@ -1,36 +1,33 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts.Skills.SkillState
 {
-    public class ReadyState : StateSkill
+    public class ReadyState : IStateSkill
     {
-        public ReadyState(LifeStillModel model) : base(model) { }
-        
-        public override void Enter()
+        public event Action<SkillStateType> ChangedState;
+
+        private ISkillUser _user;
+        private int _range;
+        private int _targetLayer;
+        private TargetSearcher _targetSearcher;
+
+        public ReadyState(LifeStillTarget target, ISkillUser user, int range, int targetLayer, TargetSearcher targetSearcher)
         {
-            base.Enter();
+            _user = user;
+            _range = range;
+            _targetLayer = targetLayer;
+            _targetSearcher = targetSearcher;
         }
 
-        public override void Update()
-        {
-            base.Update();
+        public void Enter(){}
 
-            if (_model.Player.UserInput.RightMouseButton && TryFindTarget())
+        public void Update()
+        {
+            if (_user.TryUseSkill() && _targetSearcher.TryFindTarget(_user, _range, _targetLayer))
             {
-                _model.Player.Skill.SelectState(SkillStateType.Using);
+                ChangedState?.Invoke(SkillStateType.Using);
             }
-        }
-
-        public override string TextUI()
-        {
-            return "ReadyState";
-        }
-
-        public override void DrawGizmos()
-        {
-            base.DrawGizmos();
-
-            Gizmos.DrawWireSphere(_model.Player.transform.position, _model.Range);
         }
     }
 }

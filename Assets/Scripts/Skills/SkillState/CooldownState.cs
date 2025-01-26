@@ -1,45 +1,46 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts.Skills.SkillState
 {
-    public class CooldownState : StateSkill
+    public class CooldownState : IStateSkill
     {
+        public event Action<SkillStateType> ChangedState;
+        public event Action<string> ChangingTime;
+
         private float _time = 0;
+        private ISkillUser _user;
+        private float _cooldown;
 
-        public CooldownState(LifeStillModel model) : base(model)
-        {}
-
-        public override void Enter()
+        public CooldownState(LifeStillTarget model, ISkillUser user, float cooldown)
         {
-            base.Enter();
-            //ChangeState($"CooldownState {_model.Cooldown}");
-            //_model.UI.text = $"CooldownState {_model.Cooldown}";
+            _user = user;
+            _cooldown = cooldown;
         }
 
-        public override void Exit()
+        public void Enter(){}
+
+        public void Exit()
         {
-            base.Exit();
             _time = 0;
         }
 
-        public override void Update()
+        public void Update()
         {
-            base.Update();
-
-            if (_time < _model.Cooldown)
+            if (_time < _cooldown)
             {
                 _time += Time.deltaTime;
-                //_model.UI.text = $"CooldownState {_model.Cooldown - _time}";
+                ChangingTime?.Invoke(LeftTime());
             }
             else
             {
-                _model.Player.Skill.SelectState(SkillStateType.Ready);
+                ChangedState?.Invoke(SkillStateType.Ready);
             }
         }
 
-        public override string TextUI()
+        public string LeftTime()
         {
-            return $"CooldownState {_model.Cooldown - _time}";
+            return String.Concat("Cooldown: ", (_cooldown - _time).ToString("F1"));
         }
     }
 }

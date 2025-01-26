@@ -1,80 +1,82 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts.Skills.SkillState
 {
-    public class UsingState : StateSkill
+    public class UsingState : IStateSkill
     {
+        public event Action<SkillStateType> ChangedState;
+        public event Action<string> ChangingTime;
+
         private float _time = 0;
         private float _perSecond = 0;
         private float _second = 1f;
         private int _backGorundCoordZ = -1;
 
-        public UsingState(LifeStillModel model) : base(model) {}
+        private LifeStillTarget _target;
+        private ISkillUser _user;
+        private int _useTime;
+        private int _range;
+        private LayerMask _targetLayer;
+        private int _damage;
+        private TargetSearcher _targetSearcher;
+        private LifeStillView _view;
 
-        public override void Enter()
+        public UsingState(LifeStillTarget target, ISkillUser user, int useTime, int range, LayerMask targetLayer, int damage, TargetSearcher targetSearcher, LifeStillView view)
         {
-            base.Enter();
-            //ChangeState($"UsingState: {_time}");
-            //_model.UI.text = $"UsingState: {_time}";
+            _target = target;
+            _user = user;
+            _useTime = useTime;
+            _range = range;
+            _targetLayer = targetLayer;
+            _damage = damage;
+            _targetSearcher = targetSearcher;
+            _view = view;
         }
 
-        public override void Exit()
+        public void Enter(){}
+
+        public void Exit()
         {
-            base.Exit();
             _time = 0;
         }
 
-        public override void Update()
+        public void Update()
         {
-            base.Update();
-
-            if (_time <= _model.UseTime)
+            if (_time <= _useTime)
             {
                 _time += Time.deltaTime;
+                ChangingTime?.Invoke(LeftTime());
 
-                if (TryFindTarget())
+                if (_targetSearcher.TryFindTarget(_user, _range, _targetLayer))
                 {
-                    _model.LineRenderer.SetPosition(0, new Vector3(_model.Player.transform.position.x, _model.Player.transform.position.y, _backGorundCoordZ));
-                    _model.LineRenderer.SetPosition(1, new Vector3(_model.Target.transform.position.x, _model.Target.transform.position.y, _backGorundCoordZ));
+                    _view.SetLinePosition(
+                        new Vector3(_user.UserTransform.position.x, _user.UserTransform.position.y, _backGorundCoordZ), 
+                        new Vector3(_target.Target.transform.position.x, _target.Target.transform.position.y, _backGorundCoordZ));
 
                     if (_time >= _second)
                     {
-                        int damageTake = _model.Target.Health.TakeDamage(_model.Damage);
-                        _model.Player.Health.TryTakeHealing(damageTake);
+                        int damageTake = _target.Target.Health.TakeDamage(_damage);
+                        _user.Health.TryTakeHealing(damageTake);
                         _second++;
                     }
                 }
                 else
                 {
-                    DeletLine();
+                    _view.DeletLine();
                 }
-               
-                //_model.UI.text = $"UsingState: {_model.UseTime - _time}";
             }
             else 
             {
-                 DeletLine();
-                _model.Player.Skill.SelectState(SkillStateType.Cooldown);
+                _view.DeletLine();
+                ChangedState?.Invoke(SkillStateType.Cooldown);
                 _second = 1;
             }
         }
 
-        public override string TextUI()
+        public string LeftTime()
         {
-            return $"UsingState: {_time}";
-        }
-
-        public override void DrawGizmos()
-        {
-            base.DrawGizmos();
-
-            Gizmos.DrawWireSphere(_model.Player.transform.position, _model.Range);
-        }
-
-        private void DeletLine()
-        {
-            _model.LineRenderer.SetPosition(0, Vector3.zero);
-            _model.LineRenderer.SetPosition(1, Vector3.zero);
+            return String.Concat("Use: ", (_useTime - _time).ToString("F1"));
         }
     }
 }
