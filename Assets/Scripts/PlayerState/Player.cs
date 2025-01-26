@@ -9,8 +9,8 @@ using UnityEngine;
 [RequireComponent(typeof(ITypeDamage), typeof(Animator), typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D), typeof(IUserInput), typeof(IDamageDealer))]
 [RequireComponent(typeof(IJump), typeof(IMoveUnit), typeof(HealthUnits))]
-[RequireComponent(typeof(IDead), typeof(ISkillView), typeof(Taker))]
-public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
+[RequireComponent(typeof(IDead), typeof(Taker))]
+public class Player : MonoBehaviour, ITarget, IDamagable, IUnit, ISkillUser
 {
     public IDamageDealer DamageDealer { get; private set; }
     public IUserInput UserInput { get; private set; }
@@ -18,12 +18,12 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
     public IMoveUnit Move { get; private set; }
     public HealthUnits Health { get; private set; }
     public IDead Dead { get; private set; }
-    public ISkillView Skill { get; private set; }
     public SpriteRenderer Renderer { get; private set; }
     public Animator Animator { get; private set; }
     public Rigidbody2D Rigidbody { get; private set; }
     public CapsuleCollider2D PlayerCollider { get; private set; }
     public StateMachinePlayer StateMachinePlayer { get; private set; }
+    public Transform UserTransform { get; private set; }
 
     private void Awake()
     {
@@ -33,11 +33,11 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
         Move = GetComponent<IMoveUnit>();
         Health = GetComponent<HealthUnits>();
         Dead = GetComponent<IDead>();
-        Skill = GetComponent<ISkillView>();
         Renderer = GetComponent<SpriteRenderer>();
         Animator = GetComponent<Animator>();
         Rigidbody = GetComponent<Rigidbody2D>();
         PlayerCollider = GetComponent<CapsuleCollider2D>();
+        UserTransform = GetComponent<Transform>();
 
         Health.Died += Dead.SetDead;
     }
@@ -61,28 +61,8 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
     private void Update()
     {
         StateMachinePlayer.CurrentState.Update();
+        TryUseSkill();
     }
-
-    //public void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (collision.gameObject.TryGetComponent(out ITakerObject item))
-    //    {
-    //        if (item is HealKit)
-    //        {
-    //            HealKit healKit = collision.gameObject.GetComponent<HealKit>();
-
-    //            if (Health.TryTakeHealing(healKit.HealthPoints))
-    //            {
-    //                item.TakeObject();
-    //            }
-    //        }
-
-    //        if (item is Coin)
-    //        {
-    //            item.TakeObject();
-    //        }
-    //    }
-    //}
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -105,5 +85,17 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit
     public Vector2 GetPosition()
     {
         return transform.position;
+    }
+
+    public bool TryUseSkill()
+    {
+        bool isUse = false;
+
+        if (UserInput.RightMouseButton)
+        {
+            isUse = true;
+        }
+
+        return isUse;
     }
 }
