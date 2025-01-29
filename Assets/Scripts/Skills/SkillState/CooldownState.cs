@@ -5,20 +5,26 @@ namespace Assets.Scripts.Skills.SkillState
 {
     public class CooldownState : IStateSkill
     {
-        public event Action<SkillStateType> ChangedState;
-        public event Action<string> ChangingTime;
-
         private float _time = 0;
         private ISkillUser _user;
         private float _cooldown;
+        private int _range;
 
-        public CooldownState(LifeStillTarget model, ISkillUser user, float cooldown)
+        public CooldownState(ISkillUser user, float cooldown, int range)
         {
             _user = user;
             _cooldown = cooldown;
+            _range = range;
         }
 
-        public void Enter(){}
+        public event Action<SkillStateType> ChangedState;
+        public event Action<int> ChangedRange;
+        public event Action<string> ChangingTime;
+
+        public void Enter()
+        {
+            ChangedRange?.Invoke(_range);
+        }
 
         public void Exit()
         {

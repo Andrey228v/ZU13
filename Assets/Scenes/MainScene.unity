@@ -20,12 +20,12 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 1, g: 1, b: 1, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 3
-  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+  m_SubtractiveShadowColor: {r: 1, g: 1, b: 1, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
@@ -694,6 +694,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyZombie (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1902043139557352369, guid: 9bb5fb20cf4a389439a00ebf0237ab7b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2423829036403857356, guid: 9bb5fb20cf4a389439a00ebf0237ab7b, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1169,6 +1173,18 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2470394960084238637, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2470394960084238637, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -787402587
+      objectReference: {fileID: 0}
+    - target: {fileID: 2470394960084238637, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 3433263833903274839, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1185,6 +1201,22 @@ PrefabInstance:
       propertyPath: _useTime
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4249679706986771725, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
+      propertyPath: _ariaTypeSkill
+      value: 
+      objectReference: {fileID: 7649248134469324395, guid: 89727daf10f2c9f48b1ee3a743bed7d9, type: 3}
+    - target: {fileID: 4249679706986771725, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
+      propertyPath: _rangeReadyState
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4249679706986771725, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
+      propertyPath: _rangeUsingState
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4249679706986771725, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
+      propertyPath: <AriaTypeSkill>k__BackingField
+      value: 
+      objectReference: {fileID: 7649248134469324395, guid: 89727daf10f2c9f48b1ee3a743bed7d9, type: 3}
     - target: {fileID: 4933262302562577571, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1248,6 +1280,26 @@ PrefabInstance:
     - target: {fileID: 8133267567034819872, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144516109654964755, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
+      propertyPath: m_Positions.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144516109654964755, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3db09d8f27e572e4b84b25f7c88971d3, type: 2}
+    - target: {fileID: 8144516109654964755, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
+      propertyPath: m_Positions.Array.data[1].z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144516109654964755, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144516109654964755, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.1569891
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

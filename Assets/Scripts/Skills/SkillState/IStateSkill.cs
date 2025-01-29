@@ -6,10 +6,10 @@ namespace Assets.Scripts.Skills.SkillState
     {
         public event Action<SkillStateType> ChangedState;
 
-        public void Enter() { }
+        public void Enter();
 
-        public void Exit() { }
+        public void Exit();
 
-        public void Update() { }
+        public void Update();
     }
 }

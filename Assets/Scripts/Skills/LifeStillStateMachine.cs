@@ -5,19 +5,21 @@ using UnityEngine;
 namespace Assets.Scripts.Skills
 {
     [RequireComponent(typeof(ISkillUser), typeof(LifeStillView))]
-    public class LifeStillStateMachine : MonoBehaviour
+    public class LifeStillStateMachine : MonoBehaviour, ISkillStateMachine
     {
         [SerializeField] private LayerMask _targetLayer;
         [SerializeField] private int _useTime;
         [SerializeField] private int _cooldown;
         [SerializeField] private int _damage;
-        [SerializeField] private int _range;
+        [SerializeField] private int _rangeReadyState;
+        [SerializeField] private int _rangeUsingState;
+        [SerializeField] private int _rangeCooldownState;
+        [field: SerializeField] public GameObject AriaTypeSkill { get; private set; }
         
-        public event Action<string> ChangedState;
-        public event Action<int> ChangedRange;
-
         private LifeStillView _view;
         private ISkillUser _skillUser;
+
+        public event Action<string> ChangedState;
 
         public IStateSkill CurrentState { get; private set; }
 
@@ -31,17 +33,17 @@ namespace Assets.Scripts.Skills
         {
             _view = GetComponent<LifeStillView>();
             _skillUser = GetComponent<ISkillUser>();
-        }
 
-        private void OnEnable()
-        {
             LifeStillTarget lifeStillTarget = new LifeStillTarget();
             TargetSearcher targetSearcher = new TargetSearcher(lifeStillTarget);
 
-            ReadyState = new ReadyState(lifeStillTarget, _skillUser, _range, _targetLayer, targetSearcher);
-            UsingState = new UsingState(lifeStillTarget, _skillUser, _useTime, _range, _targetLayer, _damage, targetSearcher, _view);
-            CooldownState = new CooldownState(lifeStillTarget, _skillUser, _cooldown);
-            
+            ReadyState = new ReadyState(_skillUser, _rangeReadyState, _targetLayer, targetSearcher);
+            UsingState = new UsingState(lifeStillTarget, _skillUser, _useTime, _rangeUsingState, _targetLayer, _damage, targetSearcher, _view);
+            CooldownState = new CooldownState(_skillUser, _cooldown, _rangeCooldownState);
+        }
+
+        private void OnEnable()
+        {            
             ReadyState.ChangedState += SelectState;
             UsingState.ChangedState += SelectState;
             CooldownState.ChangedState += SelectState;
@@ -49,6 +51,10 @@ namespace Assets.Scripts.Skills
 
         private void Start()
         {
+            AriaTypeSkill = Instantiate(AriaTypeSkill);
+
+            AriaTypeSkill.transform.parent = _skillUser.UserTransform;
+
             CurrentState = ReadyState;
             SelectState(SkillStateType.Ready);
         }
@@ -77,19 +83,18 @@ namespace Assets.Scripts.Skills
             switch (stateType)
             {
                 case SkillStateType.Ready:
-                    ChangedState?.Invoke(SkillStateType.Ready.ToString());
-                    ChangedRange?.Invoke(_range);
                     ChangeState(ReadyState);
+                    ChangedState?.Invoke(SkillStateType.Ready.ToString());
                     break;
 
                 case SkillStateType.Using:
                     ChangeState(UsingState);
-                    ChangedRange?.Invoke(_range);
+                    ChangedState?.Invoke(SkillStateType.Using.ToString());
                     break;
 
                 case SkillStateType.Cooldown:
                     ChangeState(CooldownState);
-                    ChangedRange?.Invoke(0);
+                    ChangedState?.Invoke(SkillStateType.Cooldown.ToString());
                     break;
 
                 default:
