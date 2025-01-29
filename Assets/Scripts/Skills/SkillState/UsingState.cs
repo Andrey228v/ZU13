@@ -5,12 +5,10 @@ namespace Assets.Scripts.Skills.SkillState
 {
     public class UsingState : IStateSkill
     {
-        public event Action<SkillStateType> ChangedState;
-        public event Action<string> ChangingTime;
-
         private float _time = 0;
         private float _perSecond = 0;
         private float _second = 1f;
+        private float _damagePerTime = 1f;
         private int _backGorundCoordZ = -1;
 
         private LifeStillTarget _target;
@@ -21,6 +19,10 @@ namespace Assets.Scripts.Skills.SkillState
         private int _damage;
         private TargetSearcher _targetSearcher;
         private LifeStillView _view;
+
+        public event Action<SkillStateType> ChangedState;
+        public event Action<int> ChangedRange;
+        public event Action<string> ChangingTime;
 
         public UsingState(LifeStillTarget target, ISkillUser user, int useTime, int range, LayerMask targetLayer, int damage, TargetSearcher targetSearcher, LifeStillView view)
         {
@@ -34,7 +36,10 @@ namespace Assets.Scripts.Skills.SkillState
             _view = view;
         }
 
-        public void Enter(){}
+        public void Enter()
+        {
+            ChangedRange?.Invoke(_range);
+        }
 
         public void Exit()
         {
@@ -46,7 +51,7 @@ namespace Assets.Scripts.Skills.SkillState
             if (_time <= _useTime)
             {
                 _time += Time.deltaTime;
-                ChangingTime?.Invoke(LeftTime());
+                ChangingTime?.Invoke(GetLeftTime());
 
                 if (_targetSearcher.TryFindTarget(_user, _range, _targetLayer))
                 {
@@ -58,7 +63,7 @@ namespace Assets.Scripts.Skills.SkillState
                     {
                         int damageTake = _target.Target.Health.TakeDamage(_damage);
                         _user.Health.TryTakeHealing(damageTake);
-                        _second++;
+                        _second += _damagePerTime;
                     }
                 }
                 else
@@ -70,11 +75,11 @@ namespace Assets.Scripts.Skills.SkillState
             {
                 _view.DeletLine();
                 ChangedState?.Invoke(SkillStateType.Cooldown);
-                _second = 1;
+                _second = _damagePerTime;
             }
         }
 
-        public string LeftTime()
+        public string GetLeftTime()
         {
             return String.Concat("Use: ", (_useTime - _time).ToString("F1"));
         }

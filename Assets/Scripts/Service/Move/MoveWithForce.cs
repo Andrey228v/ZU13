@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts.Service.Move
 {
@@ -6,6 +7,8 @@ namespace Assets.Scripts.Service.Move
     public class MoveWithForce: MonoBehaviour, IMoveUnit
     {
         [SerializeField] private float _maxSpeed;
+
+        public event Action<Vector3> ChangedPosition;
 
         public float MaxSpeed { get; private set; }
         public Vector2 MoveDirection { get; private set; }
@@ -35,6 +38,7 @@ namespace Assets.Scripts.Service.Move
         {
             Vector2 targetForce = new Vector2(direction.x * MaxSpeed, Rigidbody.velocity.y);
             Rigidbody.AddForce(targetForce, ForceMode2D.Impulse);
+            ChangedPosition?.Invoke(Rigidbody.transform.position);
         }
     }
 }

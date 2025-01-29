@@ -1,18 +1,15 @@
 ﻿using System;
-using UnityEngine;
 
 namespace Assets.Scripts.Skills.SkillState
 {
     public class ReadyState : IStateSkill
     {
-        public event Action<SkillStateType> ChangedState;
-
         private ISkillUser _user;
         private int _range;
         private int _targetLayer;
         private TargetSearcher _targetSearcher;
 
-        public ReadyState(LifeStillTarget target, ISkillUser user, int range, int targetLayer, TargetSearcher targetSearcher)
+        public ReadyState(ISkillUser user, int range, int targetLayer, TargetSearcher targetSearcher)
         {
             _user = user;
             _range = range;
@@ -20,11 +17,27 @@ namespace Assets.Scripts.Skills.SkillState
             _targetSearcher = targetSearcher;
         }
 
-        public void Enter(){}
+        public event Action<SkillStateType> ChangedState;
+        public event Action<int> ChangedRange;
+        public event Action UsedSkill;
 
-        public void Update()
+        public void Enter()
         {
-            if (_user.TryUseSkill() && _targetSearcher.TryFindTarget(_user, _range, _targetLayer))
+            _user.Use += TryUseSkill;
+
+            ChangedRange?.Invoke(_range);
+        }
+
+        public void Exit()
+        {
+            _user.Use -= TryUseSkill;
+        }
+
+        public void Update(){}
+
+        public void TryUseSkill()
+        {
+            if (_targetSearcher.TryFindTarget(_user, _range, _targetLayer))
             {
                 ChangedState?.Invoke(SkillStateType.Using);
             }

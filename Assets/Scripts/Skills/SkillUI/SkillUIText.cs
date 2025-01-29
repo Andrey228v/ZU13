@@ -6,37 +6,30 @@ using UnityEngine;
 public class SkillUIText : MonoBehaviour
 {
     [SerializeField] private TMP_Text _ui;
-    
-    private LifeStillStateMachine _skillStateMachine;
-    private string _text;
+
+    private ISkillStateMachine _skillStateMachine;
 
     private void Awake()
     {
-        _skillStateMachine = GetComponent<LifeStillStateMachine>();
-        _skillStateMachine.ChangedState += SetText;
+        _skillStateMachine = GetComponent<LifeStillStateMachine>(); 
     }
 
     private void Start()
     {
-        _skillStateMachine.UsingState.ChangingTime += UpdateText;
-        _skillStateMachine.CooldownState.ChangingTime += UpdateText;
+        _skillStateMachine.ChangedState += SetText;
+        _skillStateMachine.UsingState.ChangingTime += SetText;
+        _skillStateMachine.CooldownState.ChangingTime += SetText;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         _skillStateMachine.ChangedState -= SetText;
-        _skillStateMachine.UsingState.ChangingTime -= UpdateText;
-        _skillStateMachine.CooldownState.ChangingTime -= UpdateText;
-    }
-
-    private void UpdateText(string text)
-    {
-        _ui.text = text;
+        _skillStateMachine.UsingState.ChangingTime -= SetText;
+        _skillStateMachine.CooldownState.ChangingTime -= SetText;
     }
 
     private void SetText(string text)
     {
         _ui.text = text;
-        _text = text;
     }
 }

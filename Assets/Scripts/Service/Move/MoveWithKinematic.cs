@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Service.Move
@@ -7,6 +8,9 @@ namespace Assets.Scripts.Service.Move
     public class MoveWithKinematic : MonoBehaviour, IMoveUnit
     {
         [SerializeField] private float _maxSpeed;
+
+        public event Action<Vector3> ChangedPosition;
+
         public float MaxSpeed { get; private set; }
         public Vector2 MoveDirection { get; private set; }
         public Rigidbody2D Rigidbody { get; private set; }
@@ -34,6 +38,7 @@ namespace Assets.Scripts.Service.Move
         public void Action(Vector2 direction)
         {
             gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, direction, _maxSpeed * Time.deltaTime);
+            ChangedPosition?.Invoke(gameObject.transform.position);
         }
     }
 }

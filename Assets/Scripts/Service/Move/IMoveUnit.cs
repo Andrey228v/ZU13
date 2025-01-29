@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts.Service
 {
     public interface IMoveUnit
     {
+        public event Action<Vector3> ChangedPosition;
+
         public float MaxSpeed { get;}
         public Vector2 MoveDirection { get;}
         public Rigidbody2D Rigidbody { get;}

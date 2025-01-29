@@ -4,6 +4,7 @@ using Assets.Scripts.Service.Health;
 using Assets.Scripts.Service.Taker;
 using Assets.Scripts.Service.Unit;
 using Assets.Scripts.Skills;
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(ITypeDamage), typeof(Animator), typeof(Rigidbody2D))]
@@ -12,6 +13,8 @@ using UnityEngine;
 [RequireComponent(typeof(IDead), typeof(Taker))]
 public class Player : MonoBehaviour, ITarget, IDamagable, IUnit, ISkillUser
 {
+    public event Action Use;
+
     public IDamageDealer DamageDealer { get; private set; }
     public IUserInput UserInput { get; private set; }
     public IJump Jump { get; private set; }
@@ -61,7 +64,7 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit, ISkillUser
     private void Update()
     {
         StateMachinePlayer.CurrentState.Update();
-        TryUseSkill();
+        UseSkill();
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -87,15 +90,11 @@ public class Player : MonoBehaviour, ITarget, IDamagable, IUnit, ISkillUser
         return transform.position;
     }
 
-    public bool TryUseSkill()
+    public void UseSkill()
     {
-        bool isUse = false;
-
         if (UserInput.RightMouseButton)
         {
-            isUse = true;
+            Use?.Invoke();
         }
-
-        return isUse;
     }
 }
