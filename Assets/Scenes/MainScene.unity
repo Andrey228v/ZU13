@@ -944,7 +944,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1830847887185653998, guid: 9bb5fb20cf4a389439a00ebf0237ab7b, type: 3}
       propertyPath: _amount
-      value: 1
+      value: 92
       objectReference: {fileID: 0}
     - target: {fileID: 1902043139557352369, guid: 9bb5fb20cf4a389439a00ebf0237ab7b, type: 3}
       propertyPath: m_Name
@@ -1207,7 +1207,7 @@ PrefabInstance:
       objectReference: {fileID: 7649248134469324395, guid: 89727daf10f2c9f48b1ee3a743bed7d9, type: 3}
     - target: {fileID: 4249679706986771725, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
       propertyPath: _rangeReadyState
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4249679706986771725, guid: 2d8992deb2d564e40bb29691b0c46000, type: 3}
       propertyPath: _rangeUsingState
@@ -1301,7 +1301,8 @@ PrefabInstance:
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
       value: 0.1569891
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

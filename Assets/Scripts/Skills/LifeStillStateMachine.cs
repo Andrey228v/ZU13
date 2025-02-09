@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Skills
 {
-    [RequireComponent(typeof(ISkillUser), typeof(LifeStillView))]
+    [RequireComponent(typeof(ISkillUser), typeof(LifeStillView), typeof(Timer))]
     public class LifeStillStateMachine : MonoBehaviour, ISkillStateMachine
     {
         [SerializeField] private LayerMask _targetLayer;
@@ -18,6 +18,7 @@ namespace Assets.Scripts.Skills
         
         private LifeStillView _view;
         private ISkillUser _skillUser;
+        private Timer _timer;
 
         public event Action<string> ChangedState;
 
@@ -33,13 +34,19 @@ namespace Assets.Scripts.Skills
         {
             _view = GetComponent<LifeStillView>();
             _skillUser = GetComponent<ISkillUser>();
+            _timer = GetComponent<Timer>();
 
             LifeStillTarget lifeStillTarget = new LifeStillTarget();
             TargetSearcher targetSearcher = new TargetSearcher(lifeStillTarget);
+            UseSkill useSkill = new UseSkill(_timer, targetSearcher);
 
             ReadyState = new ReadyState(_skillUser, _rangeReadyState, _targetLayer, targetSearcher);
-            UsingState = new UsingState(lifeStillTarget, _skillUser, _useTime, _rangeUsingState, _targetLayer, _damage, targetSearcher, _view);
-            CooldownState = new CooldownState(_skillUser, _cooldown, _rangeCooldownState);
+            UsingState = new UsingState(lifeStillTarget, _skillUser, _useTime, _rangeUsingState, _targetLayer, _damage, targetSearcher, _view, _timer, useSkill);
+            CooldownState = new CooldownState(_skillUser, _cooldown, _rangeCooldownState, _timer);
+
+            AriaTypeSkill = Instantiate(AriaTypeSkill);
+
+            AriaTypeSkill.transform.parent = _skillUser.UserTransform;
         }
 
         private void OnEnable()
@@ -51,10 +58,6 @@ namespace Assets.Scripts.Skills
 
         private void Start()
         {
-            AriaTypeSkill = Instantiate(AriaTypeSkill);
-
-            AriaTypeSkill.transform.parent = _skillUser.UserTransform;
-
             CurrentState = ReadyState;
             SelectState(SkillStateType.Ready);
         }

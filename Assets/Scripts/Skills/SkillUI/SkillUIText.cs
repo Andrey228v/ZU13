@@ -1,35 +1,28 @@
 using Assets.Scripts.Skills;
+using Assets.Scripts.Skills.SkillState;
 using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(LifeStillStateMachine))]
 public class SkillUIText : MonoBehaviour
 {
-    [SerializeField] private TMP_Text _ui;
+    [SerializeField] private TMP_Text _textState;
+    [SerializeField] private TMP_Text _textTime;
 
-    private ISkillStateMachine _skillStateMachine;
-
-    private void Awake()
-    {
-        _skillStateMachine = GetComponent<LifeStillStateMachine>(); 
-    }
+    private SkillStateType _stateType;
 
     private void Start()
     {
-        _skillStateMachine.ChangedState += SetText;
-        _skillStateMachine.UsingState.ChangingTime += SetText;
-        _skillStateMachine.CooldownState.ChangingTime += SetText;
+        SetTimeText("");
     }
 
-    private void OnDestroy()
+    public void SetStateText(string text)
     {
-        _skillStateMachine.ChangedState -= SetText;
-        _skillStateMachine.UsingState.ChangingTime -= SetText;
-        _skillStateMachine.CooldownState.ChangingTime -= SetText;
+        _textState.text = text;
     }
 
-    private void SetText(string text)
+    public void SetTimeText(string text)
     {
-        _ui.text = text;
+        _textTime.text = text;
     }
 }
