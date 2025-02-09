@@ -5,43 +5,23 @@ namespace Assets.Scripts.Skills.SkillUI
     [RequireComponent(typeof(LifeStillStateMachine), typeof(ISkillUser))]
     public class AriaSkillDraw : MonoBehaviour
     {
-        private LifeStillStateMachine _skillStateMachine;
-        private ISkillUser _skillUser;
-        private Vector2 _position;
+        private GameObject _ariaTypeSkill;
+        private int _coefficientRangeToRadius = 2;
 
-        private void Awake()
+        public void SetAria(GameObject aria)
         {
-            _skillStateMachine = GetComponent<LifeStillStateMachine>();
-            _skillUser = GetComponent<ISkillUser>();
+            _ariaTypeSkill = aria;
         }
 
-        private void Start()
+        public void SetPosition(Vector3 position)
         {
-            _skillStateMachine.ReadyState.ChangedRange += SetRange;
-            _skillStateMachine.UsingState.ChangedRange += SetRange;
-            _skillStateMachine.CooldownState.ChangedRange += SetRange;
-            _skillUser.Move.ChangedPosition += SetPosition;
-
-            _position = _skillUser.UserTransform.position;
+            _ariaTypeSkill.transform.position = position;
         }
 
-        private void OnDestroy()
+        public void SetRange(int range)
         {
-            _skillStateMachine.ReadyState.ChangedRange -= SetRange;
-            _skillStateMachine.UsingState.ChangedRange -= SetRange;
-            _skillStateMachine.CooldownState.ChangedRange -= SetRange;
-            _skillUser.Move.ChangedPosition -= SetPosition;
-        }
-
-        private void SetPosition(Vector3 position)
-        {
-            _skillStateMachine.AriaTypeSkill.transform.position = position;
-        }
-
-        private void SetRange(int range)
-        {
-            int radius = range * 2;
-            _skillStateMachine.AriaTypeSkill.transform.localScale = new Vector2(radius, radius);
+            int radius = range * _coefficientRangeToRadius;
+            _ariaTypeSkill.transform.localScale = new Vector2(radius, radius);
         }
     }
 }

@@ -5,8 +5,8 @@ namespace Assets.Scripts.Skills
     [RequireComponent(typeof(LineRenderer))]
     public class LifeStillView : MonoBehaviour
     {
-        private ISkillUser _user;
         private LineRenderer _lineRenderer;
+        private int _backGorundCoordZ = -1;
 
         private void Awake()
         {
@@ -23,6 +23,13 @@ namespace Assets.Scripts.Skills
         {
             _lineRenderer.SetPosition(0, Vector3.zero);
             _lineRenderer.SetPosition(1, Vector3.zero);
+        }
+
+        public void DrawLineFromUserToTarget(Transform user, Transform target)
+        {
+            SetLinePosition(
+                        new Vector3(user.position.x, user.position.y, _backGorundCoordZ),
+                        new Vector3(target.position.x, target.position.y, _backGorundCoordZ));
         }
     }
 }

@@ -24,7 +24,6 @@ namespace Assets.Scripts.Skills.SkillState
         public void Enter()
         {
             _user.Use += TryUseSkill;
-
             ChangedRange?.Invoke(_range);
         }
 
@@ -35,12 +34,9 @@ namespace Assets.Scripts.Skills.SkillState
 
         public void Update(){}
 
-        public void TryUseSkill()
+        private void TryUseSkill()
         {
-            if (_targetSearcher.TryFindTarget(_user, _range, _targetLayer))
-            {
-                ChangedState?.Invoke(SkillStateType.Using);
-            }
+            ChangedState?.Invoke(SkillStateType.Using);
         }
     }
 }

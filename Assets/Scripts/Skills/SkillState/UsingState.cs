@@ -5,12 +5,6 @@ namespace Assets.Scripts.Skills.SkillState
 {
     public class UsingState : IStateSkill
     {
-        private float _time = 0;
-        private float _perSecond = 0;
-        private float _second = 1f;
-        private float _damagePerTime = 1f;
-        private int _backGorundCoordZ = -1;
-
         private LifeStillTarget _target;
         private ISkillUser _user;
         private int _useTime;
@@ -19,12 +13,10 @@ namespace Assets.Scripts.Skills.SkillState
         private int _damage;
         private TargetSearcher _targetSearcher;
         private LifeStillView _view;
+        private Timer _timer;
+        private UseSkill _useSkill;
 
-        public event Action<SkillStateType> ChangedState;
-        public event Action<int> ChangedRange;
-        public event Action<string> ChangingTime;
-
-        public UsingState(LifeStillTarget target, ISkillUser user, int useTime, int range, LayerMask targetLayer, int damage, TargetSearcher targetSearcher, LifeStillView view)
+        public UsingState(LifeStillTarget target, ISkillUser user, int useTime, int range, LayerMask targetLayer, int damage, TargetSearcher targetSearcher, LifeStillView view, Timer timer, UseSkill useSkill)
         {
             _target = target;
             _user = user;
@@ -34,54 +26,36 @@ namespace Assets.Scripts.Skills.SkillState
             _damage = damage;
             _targetSearcher = targetSearcher;
             _view = view;
+            _timer = timer;
+            _useSkill = useSkill;
         }
+
+        public event Action<SkillStateType> ChangedState;
+        public event Action<int> ChangedRange;
 
         public void Enter()
         {
             ChangedRange?.Invoke(_range);
+            _timer.SetStopTime(_useTime);
+            _timer.StartTimer();
         }
 
         public void Exit()
         {
-            _time = 0;
+            _view.DeletLine();
+            _timer.ResetTime();
         }
 
         public void Update()
         {
-            if (_time <= _useTime)
+            if (_timer.IsWorking)
             {
-                _time += Time.deltaTime;
-                ChangingTime?.Invoke(GetLeftTime());
-
-                if (_targetSearcher.TryFindTarget(_user, _range, _targetLayer))
-                {
-                    _view.SetLinePosition(
-                        new Vector3(_user.UserTransform.position.x, _user.UserTransform.position.y, _backGorundCoordZ), 
-                        new Vector3(_target.Target.transform.position.x, _target.Target.transform.position.y, _backGorundCoordZ));
-
-                    if (_time >= _second)
-                    {
-                        int damageTake = _target.Target.Health.TakeDamage(_damage);
-                        _user.Health.TryTakeHealing(damageTake);
-                        _second += _damagePerTime;
-                    }
-                }
-                else
-                {
-                    _view.DeletLine();
-                }
+                _useSkill.Use(_target, _user, _range, _targetLayer, _damage, _view);
             }
-            else 
+            else
             {
-                _view.DeletLine();
                 ChangedState?.Invoke(SkillStateType.Cooldown);
-                _second = _damagePerTime;
             }
-        }
-
-        public string GetLeftTime()
-        {
-            return String.Concat("Use: ", (_useTime - _time).ToString("F1"));
         }
     }
 }
